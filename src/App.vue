@@ -1,29 +1,49 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <div class="title-bar">Ray</div>
+
+    <div class="container">
+      <router-view/>
     </div>
-    <router-view/>
   </div>
 </template>
 
 <style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
 }
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+// body {
+//   -webkit-app-region: drag;
+// }
+#app {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  font-size: 14px;
+  // font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  // -webkit-font-smoothing: antialiased;
+  // -moz-osx-font-smoothing: grayscale;
+  // text-align: center;
+  // color: #2c3e50;
+}
+.title-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 22px;
+  line-height: 22px;
+  // background: red;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  -webkit-app-region: drag;
+  z-index: 9999;
+}
+.container {
+  height: calc(100% - 22px);
+  padding-top: 22px;
 }
 </style>
