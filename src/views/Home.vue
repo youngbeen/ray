@@ -1,20 +1,94 @@
 <template>
   <div class="page-home">
-    <navigation></navigation>
+    <poster-wall></poster-wall>
 
-    <div class="preview">
-      awef
+    <div class="box-container">
+      <!-- 最新文章 -->
+      <div class="box-seg">
+        <div class="title">
+          Latest
+          <div class="btn" @click="go()">view all</div>
+        </div>
+        <div class="row" v-for="l in lastestList" :key="l.id" @click="view(l)">
+          <img :src="l.icon" alt="">
+          <div class="text">{{ l.title }}</div>
+        </div>
+      </div>
+
+      <!-- 关注的源 -->
+      <div class="box-seg">
+        <div class="title">
+          Feeds
+          <div class="btn" @click="go()">view all</div>
+        </div>
+        <div class="row" v-for="(feed, index) in system.rssSources" :key="feed.id" @click="go(feed, index)">
+          <img :src="feed.icon" alt="">
+          <div class="text">{{ feed.title }}</div>
+        </div>
+      </div>
+
+      <!-- 功能 -->
+      <div class="box-seg">
+        <!-- <div class="title">Feeds</div> -->
+        <div class="row">
+          <img src="../assets/gear.png" alt="">
+          <div class="text">System Config TODO</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import Navigation from '@/components/Navigation.vue'
+import system from '@/models/system'
+import PosterWall from '@/components/PosterWall'
 
 export default {
   name: 'home',
+  data () {
+    return {
+      system
+    }
+  },
+  computed: {
+    lastestList () {
+      if (this.system.chapters.length) {
+        let plainList = this.system.chapters.reduce((soFar, cat) => {
+          return [...soFar, ...cat.list]
+        }, [])
+        plainList.sort((a, b) => b.pubDate - a.pubDate)
+        return plainList.slice(0, 10)
+      } else {
+        return []
+      }
+    }
+  },
+
+  methods: {
+    view (chapter) {
+      let url = chapter.link || ''
+      // console.log(url)
+      if (url) {
+        this.$router.push({
+          name: 'read',
+          query: {
+            url: encodeURIComponent(url)
+          }
+        })
+      }
+    },
+    go (feed, index) {
+      if (feed && feed.id) {
+        system.activeRssIndex = index
+      }
+      this.$router.push({
+        name: 'feeds'
+      })
+    }
+  },
+
   components: {
-    Navigation
+    PosterWall
   }
 }
 </script>
@@ -22,11 +96,75 @@ export default {
 <style lang="scss" scoped>
 .page-home {
   position: relative;
-  height: 100%;
-  .preview {
-    margin-left: 300px;
-    height: 100%;
-    // background: blue;
+  .box-container {
+    display: flex;
+    justify-content: space-around;
+    padding: 24px 24px;
+    background: #fafafa;
+    .box-seg {
+      width: 30%;
+      height: auto;
+      // border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 1px 1px 8px 1px rgba(122, 122, 122, .2);
+      overflow: hidden;
+      .title {
+        position: relative;
+        height: 36px;
+        line-height: 36px;
+        padding: 0 12px;
+        border-bottom: 1px solid #eee;
+        font-size: 14x;
+        font-weight: 500;
+        .btn {
+          position: absolute;
+          right: 0;
+          top: 0;
+          padding: 0 12px;
+          // background: red;
+          color: rgb(102, 102, 102);
+          font-size: 12px;
+          font-weight: normal;
+          cursor: pointer;
+          user-select: none;
+          &:hover {
+            color: #a7a844;
+          }
+        }
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        height: 36px;
+        padding: 0 12px;
+        cursor: pointer;
+        user-select: none;
+        &:not(:last-child) {
+          border-bottom: 1px solid #eee;
+        }
+        img {
+          margin-right: 6px;
+          max-width: 14px;
+          max-height: 14px;
+        }
+        .text {
+          // width: 100%;
+          color: #666;
+          font-size: 13px;
+          font-weight: 500;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        &:hover {
+          background: #eee;
+          .text {
+            color: #333;
+          }
+        }
+      }
+    }
   }
 }
 </style>
