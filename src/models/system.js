@@ -1,8 +1,8 @@
 export default {
-  activeRssIndex: 0,
+  activeRssIndex: -1,
   rssSources: [
     // {
-    //   id: '', // 前端生成，生成规则 = md5(title + '==' + link)
+    //   id: '', // 前端生成，首次添加生成，生成规则 = md5(title + '==' + link)
     //   active: true,
     //   title: '',
     //   source: '',

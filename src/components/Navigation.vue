@@ -3,19 +3,19 @@
     <div class="box-btn">
       <div class="btn" @click="back()">
         <img class="arrow" src="../assets/arrow_left.png" alt="<">
-        <img class="icon" src="../assets/home.png" alt="Home">
+        back
       </div>
     </div>
 
-    <div class="title">Feeds ({{ system.rssSources.length }})</div>
-    <div class="box-feed" :class="[index === system.activeRssIndex ? 'active' : '']" v-for="(feed, index) in system.rssSources" :key="index" @click="changeFeed(index)">
+    <div class="title">Feeds ({{ activeFeeds.length }})</div>
+    <div class="box-feed" :class="[feed.id === activeRssId ? 'active' : '']" v-for="(feed) in activeFeeds" :key="feed.id" @click="changeFeed(feed)">
       <img class="icon" :src="feed.icon" alt="">
       {{ feed.title }}
-      <img class="arrow" src="../assets/arrow_right.png" alt=">" v-show="index === system.activeRssIndex">
+      <img class="arrow" src="../assets/arrow_right.png" alt=">" v-show="feed.id === activeRssId">
     </div>
 
-    <div class="no-data" v-show="!system.rssSources.length">
-      <div class="btn" @click="addFeed()">Add First Feed</div>
+    <div class="no-data" v-show="!activeFeeds.length">
+      <div class="btn" @click="addFeed()">Add Feed</div>
     </div>
   </section>
 </template>
@@ -30,15 +30,30 @@ export default {
       system
     }
   },
+  computed: {
+    activeRssId () {
+      if (this.activeFeeds.length && this.system.activeRssIndex > -1) {
+        return this.system.rssSources[this.system.activeRssIndex].id
+      } else {
+        return ''
+      }
+    },
+    activeFeeds () {
+      return this.system.rssSources.filter(item => item.active)
+    }
+  },
 
   methods: {
-    changeFeed (index) {
-      if (index !== system.activeRssIndex) {
+    changeFeed (feed) {
+      if (feed.id !== this.activeRssId) {
+        let index = system.rssSources.findIndex(item => item.id === feed.id)
         system.activeRssIndex = index
       }
     },
     addFeed () {
-      // TODO
+      this.$router.push({
+        name: 'feedsManage'
+      })
     },
     back () {
       this.$router.go(-1)

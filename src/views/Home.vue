@@ -21,7 +21,7 @@
           Feeds
           <div class="btn" @click="go()">view all</div>
         </div>
-        <div class="row" v-for="(feed, index) in system.rssSources" :key="feed.id" @click="go(feed, index)">
+        <div class="row" v-for="(feed) in activeFeeds" :key="feed.id" @click="go(feed)">
           <img :src="feed.icon" alt="">
           <div class="text">{{ feed.title }}</div>
         </div>
@@ -30,6 +30,10 @@
       <!-- 功能 -->
       <div class="box-seg">
         <!-- <div class="title">Feeds</div> -->
+        <div class="row" v-if="activeFeeds.length">
+          <img src="../assets/plus.png" alt="+">
+          <div class="text" @click="addFeed()">Add New Rss Feed</div>
+        </div>
         <div class="row">
           <img src="../assets/gear.png" alt="">
           <div class="text">System Config TODO</div>
@@ -53,14 +57,17 @@ export default {
   computed: {
     lastestList () {
       if (this.system.chapters.length) {
-        let plainList = this.system.chapters.reduce((soFar, cat) => {
+        let plainList = JSON.parse(JSON.stringify(this.system.chapters.reduce((soFar, cat) => {
           return [...soFar, ...cat.list]
-        }, [])
+        }, [])))
         plainList.sort((a, b) => b.pubDate - a.pubDate)
         return plainList.slice(0, 10)
       } else {
         return []
       }
+    },
+    activeFeeds () {
+      return this.system.rssSources.filter(item => item.active)
     }
   },
 
@@ -77,12 +84,18 @@ export default {
         })
       }
     },
-    go (feed, index) {
+    go (feed) {
       if (feed && feed.id) {
+        let index = system.rssSources.findIndex(item => item.id === feed.id)
         system.activeRssIndex = index
       }
       this.$router.push({
         name: 'feeds'
+      })
+    },
+    addFeed () {
+      this.$router.push({
+        name: 'feedsManage'
       })
     }
   },
@@ -96,11 +109,12 @@ export default {
 <style lang="scss" scoped>
 .page-home {
   position: relative;
+  min-height: 100%;
+  background: #fafafa;
   .box-container {
     display: flex;
     justify-content: space-around;
     padding: 24px 24px;
-    background: #fafafa;
     .box-seg {
       width: 30%;
       height: auto;

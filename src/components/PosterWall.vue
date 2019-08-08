@@ -59,7 +59,9 @@ export default {
 
   methods: {
     addFeed () {
-      // TODO
+      this.$router.push({
+        name: 'feedsManage'
+      })
     },
     view (chapter) {
       let url = chapter.link || ''

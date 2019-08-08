@@ -31,7 +31,7 @@ export default {
   },
   computed: {
     currentFeedChapters () {
-      if (this.system.chapters.length && this.system.rssSources.length) {
+      if (this.system.chapters.length && this.system.rssSources.filter(f => f.active).length && this.system.activeRssIndex > -1) {
         let currentChannel = this.system.chapters.find(item => item.rssId === this.system.rssSources[this.system.activeRssIndex].id)
         if (currentChannel) {
           return currentChannel.list || []
