@@ -32,10 +32,10 @@
         <div class="box-actions">
           <div class="btn btn-warn" v-if="feed.active" @click="activate(feed, false)">Unfollow</div>
           <div class="btn" v-else @click="activate(feed, true)">Follow</div>
-          <div class="btn" @click="handleEdit()">
+          <!-- <div class="btn" @click="handleEdit()">
             <img src="../assets/edit.png" alt="Edit">
-          </div>
-          <div class="btn" @click="handleDelete()">
+          </div> -->
+          <div class="btn" @click="handleDelete(feed)">
             <img src="../assets/bin.png" alt="Delete">
           </div>
         </div>
@@ -75,15 +75,44 @@ export default {
     activate (feed, value) {
       if (feed && feed.id) {
         let index = system.rssSources.findIndex(item => item.id === feed.id)
-        system.rssSources[index].active = value
-        systemCtrl.saveRssSubscribes()
+        if (value) {
+          // 激活feed
+          this.loading = true
+          getFeeds(feed.source).then(data => {
+            // console.log(data)
+            this.loading = false
+            parseString(data, (err, result) => {
+              console.log(err, result)
+              if (err) {
+                window.alert('Connection failed! The feed source has some errors')
+                return
+              }
+              system.rssSources[index].active = value
+              systemCtrl.saveRssSubscribes()
+              systemCtrl.addChapters(result)
+            })
+          }).catch(err => {
+            console.warn(err)
+            this.loading = false
+            window.alert('Connection failed!')
+          })
+        } else {
+          // unfollow feed
+          system.rssSources[index].active = value
+          systemCtrl.saveRssSubscribes()
+          systemCtrl.removeChapters(feed.id)
+        }
       }
     },
-    handleEdit () {
-      // TODO
-    },
-    handleDelete () {
-      // TODO
+    // handleEdit () {
+    // },
+    handleDelete (feed) {
+      if (feed && feed.id) {
+        let index = system.rssSources.findIndex(item => item.id === feed.id)
+        system.rssSources.splice(index, 1)
+        systemCtrl.removeChapters(feed.id)
+        systemCtrl.saveRssSubscribes()
+      }
     },
     handleAdd () {
       this.inputUrl = this.inputUrl.replace(/\s|\n|\r/g, '')
@@ -100,8 +129,26 @@ export default {
         } else {
           // 添加的feed，但处于未激活状态，直接激活
           console.log('添加过但未激活的feed')
-          system.rssSources[targetIndex].active = true
-          systemCtrl.saveRssSubscribes()
+          // 重新Follow feed,需要抓取其文章
+          this.loading = true
+          getFeeds(system.rssSources[targetIndex].source).then(data => {
+            // console.log(data)
+            this.loading = false
+            parseString(data, (err, result) => {
+              console.log(err, result)
+              if (err) {
+                window.alert('Connection failed! The feed source has some errors')
+                return
+              }
+              system.rssSources[targetIndex].active = true
+              systemCtrl.saveRssSubscribes()
+              systemCtrl.addChapters(result)
+            })
+          }).catch(err => {
+            console.warn(err)
+            this.loading = false
+            window.alert('Connection failed!')
+          })
         }
         this.inputUrl = ''
       } else {
@@ -262,7 +309,7 @@ export default {
         .btn {
           display: flex;
           align-items: center;
-          margin-right: 4px;
+          margin-right: 6px;
           height: 24px;
           padding: 0 8px;
           // border: 1px solid #ccc;

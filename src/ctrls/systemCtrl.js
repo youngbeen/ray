@@ -69,6 +69,14 @@ export default {
       list
     })
   },
+  removeChapters (rssId) {
+    if (rssId) {
+      let index = system.chapters.findIndex(item => item.rssId === rssId)
+      if (index > -1) {
+        system.chapters.splice(index, 1)
+      }
+    }
+  },
   saveRssSubscribes () {
     window.localStorage.setItem('raySavedRssFeeds', JSON.stringify(system.rssSources))
   },

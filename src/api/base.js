@@ -1,6 +1,6 @@
 import axios from 'axios'
 // 全局参数，自定义参数可在发送请求时设置
-axios.defaults.timeout = 30000 // 超时时间ms
+axios.defaults.timeout = 10000 // 超时时间ms
 // axios.defaults.withCredentials = true
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 // const testServerDomain = 'http://172.30.251.41:7108' // 请求域 测试环境
