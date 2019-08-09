@@ -4,7 +4,7 @@
       <div class="box-chapter" v-show="currentFeedChapters.length" v-for="chapter in currentFeedChapters" :key="chapter.id" @click="view(chapter)">
         <div class="content" :class="[chapter.avatar ? 'padded' : '']">
           <div class="title">{{ chapter.title }}</div>
-          <div class="author-tip">{{ chapter.pubDate }}</div>
+          <div class="author-tip">{{ chapter.pubDateText }}</div>
           <div class="desc">{{ chapter.plainDescription }}</div>
           <!-- <p v-html="chapter.description"></p> -->
         </div>
@@ -13,13 +13,14 @@
         </div>
       </div>
 
-      <div class="no-data" v-show="!currentFeedChapters.length">- No chapters found -</div>
+      <div class="no-data" v-show="!currentFeedChapters.length">No chapters found</div>
     </div>
 
   </section>
 </template>
 
 <script>
+import { dateUtil } from '@youngbeen/angle-util'
 import system from '@/models/system'
 
 export default {
@@ -34,7 +35,12 @@ export default {
       if (this.system.chapters.length && this.system.rssSources.filter(f => f.active).length && this.system.activeRssIndex > -1) {
         let currentChannel = this.system.chapters.find(item => item.rssId === this.system.rssSources[this.system.activeRssIndex].id)
         if (currentChannel) {
-          return currentChannel.list || []
+          let list = currentChannel.list || []
+          list = list.map(item => {
+            item.pubDateText = dateUtil.formatDateTime('YYYY-MM-DD HH:mm:ss', item.pubDate)
+            return item
+          })
+          return list
         } else {
           return []
         }
@@ -73,22 +79,20 @@ export default {
     padding: 16px 16px;
     .box-chapter {
       position: relative;
-      padding: 10px 16px;
-      border: 1px solid #aaa;
-      border-radius: 6px;
+      padding: 18px 24px;
+      border-bottom: 1px solid #eee;
+      // border-radius: 6px;
+      background: #fff;
       color: #333;
       // opacity: 0.8;
       cursor: pointer;
       user-select: none;
       transition: all 0.4s;
       overflow: hidden;
-      &:not(:last-child) {
-        margin-bottom: 12px;
-      }
       &:hover {
         background: linear-gradient(45deg, #fff, #ebeaac);
         color: #000;
-        box-shadow: 1px 1px 18px 1px rgba(122, 122, 122, .2);
+        // box-shadow: 1px 1px 18px 1px rgba(122, 122, 122, .2);
         // opacity: 1;
       }
       .content {
@@ -96,14 +100,14 @@ export default {
           margin-right: 90px;
         }
         .title {
-          margin-bottom: 6px;
+          margin-bottom: 8px;
           font-size: 17px;
           font-weight: 500;
         }
         .author-tip {
           margin-bottom: 6px;
           color: #aaa;
-          font-size: 10px;
+          font-size: 12px;
         }
         .desc {
           font-size: 13px;
@@ -131,10 +135,10 @@ export default {
       }
     }
     .no-data {
-      padding-top: 40px;
+      padding: 12px;
       color: #666;
       text-align: center;
-      font-size: 13px;
+      font-size: 12px;
     }
   }
 }

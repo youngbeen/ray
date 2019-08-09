@@ -77,10 +77,10 @@ export default {
         let index = system.rssSources.findIndex(item => item.id === feed.id)
         if (value) {
           // 激活feed
-          this.loading = true
+          system.loading = this.loading = true
           getFeeds(feed.source).then(data => {
             // console.log(data)
-            this.loading = false
+            system.loading = this.loading = false
             parseString(data, (err, result) => {
               console.log(err, result)
               if (err) {
@@ -93,7 +93,7 @@ export default {
             })
           }).catch(err => {
             console.warn(err)
-            this.loading = false
+            system.loading = this.loading = false
             window.alert('Connection failed!')
           })
         } else {
@@ -130,10 +130,10 @@ export default {
           // 添加的feed，但处于未激活状态，直接激活
           console.log('添加过但未激活的feed')
           // 重新Follow feed,需要抓取其文章
-          this.loading = true
+          system.loading = this.loading = true
           getFeeds(system.rssSources[targetIndex].source).then(data => {
             // console.log(data)
-            this.loading = false
+            system.loading = this.loading = false
             parseString(data, (err, result) => {
               console.log(err, result)
               if (err) {
@@ -146,17 +146,17 @@ export default {
             })
           }).catch(err => {
             console.warn(err)
-            this.loading = false
+            system.loading = this.loading = false
             window.alert('Connection failed!')
           })
         }
         this.inputUrl = ''
       } else {
         // 添加一个新feed
-        this.loading = true
+        system.loading = this.loading = true
         getFeeds(this.inputUrl).then(data => {
           // console.log(data)
-          this.loading = false
+          system.loading = this.loading = false
           parseString(data, (err, result) => {
             console.log(err, result)
             if (err) {
@@ -170,7 +170,7 @@ export default {
           })
         }).catch(err => {
           console.warn(err)
-          this.loading = false
+          system.loading = this.loading = false
           window.alert('Connection failed! Please check the source url')
         })
       }
@@ -318,6 +318,7 @@ export default {
           background: #ddd;
           font-size: 12px;
           font-weight: 500;
+          opacity: 0.6;
           transition: all 0.4s;
           cursor: pointer;
           user-select: none;
@@ -326,7 +327,7 @@ export default {
             background: #d8473d;
           }
           &:hover {
-            opacity: 0.7;
+            opacity: 1;
           }
           img {
             max-width: 12px;

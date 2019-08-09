@@ -67,7 +67,8 @@ export default {
       }
     },
     activeFeeds () {
-      return this.system.rssSources.filter(item => item.active)
+      let list = this.system.rssSources.filter(item => item.active)
+      return list.slice(0, 10)
     }
   },
 

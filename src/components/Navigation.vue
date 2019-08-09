@@ -7,10 +7,14 @@
       </div>
     </div>
 
-    <div class="title">Feeds ({{ activeFeeds.length }})</div>
+    <div class="title">
+      Feeds ({{ activeFeeds.length }})
+      <div class="btn" @click="syncAll()">update all</div>
+    </div>
     <div class="box-feed" :class="[feed.id === activeRssId ? 'active' : '']" v-for="(feed) in activeFeeds" :key="feed.id" @click="changeFeed(feed)">
       <img class="icon" :src="feed.icon" alt="">
       {{ feed.title }}
+      <img class="fresh" src="../assets/sync.png" alt="update" @click.stop="handleSync(feed)">
       <img class="arrow" src="../assets/arrow_right.png" alt=">" v-show="feed.id === activeRssId">
     </div>
 
@@ -22,6 +26,7 @@
 
 <script>
 import system from '@/models/system'
+import dataCtrl from '@/ctrls/dataCtrl'
 
 export default {
   name: 'navigation',
@@ -54,6 +59,15 @@ export default {
       this.$router.push({
         name: 'feedsManage'
       })
+    },
+    handleSync (feed) {
+      // console.log(feed)
+      if (feed && feed.id && feed.source) {
+        dataCtrl.updateFeed(feed)
+      }
+    },
+    syncAll () {
+      dataCtrl.updateAllFeeds()
     },
     back () {
       this.$router.go(-1)
@@ -94,11 +108,28 @@ export default {
     }
   }
   .title {
+    position: relative;
     height: 30px;
     line-height: 30px;
     padding: 0 12px;
     border-bottom: 1px solid #eee;
-    font-size: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    .btn {
+      position: absolute;
+      right: 0;
+      top: 0;
+      padding: 0 12px;
+      // background: red;
+      color: rgb(102, 102, 102);
+      font-size: 12px;
+      font-weight: normal;
+      cursor: pointer;
+      user-select: none;
+      &:hover {
+        color: #a7a844;
+      }
+    }
   }
   .box-feed {
     display: flex;
@@ -108,14 +139,22 @@ export default {
     height: 34px;
     padding: 0 12px;
     color: #666;
+    font-size: 13px;
     font-weight: 500;
     cursor: pointer;
     user-select: none;
     .icon {
       margin-right: 6px;
-      max-width: 18px;
-      max-height: 18px;
+      max-width: 16px;
+      max-height: 16px;
       opacity: 0.6;
+    }
+    .fresh {
+      position: absolute;
+      right: 32px;
+      top: 8px;
+      width: 18px;
+      opacity: 0;
     }
     .arrow {
       position: absolute;
@@ -127,6 +166,11 @@ export default {
       color: #000;
       background: #eee;
       .icon {
+        opacity: 1;
+      }
+    }
+    &:hover {
+      .fresh {
         opacity: 1;
       }
     }

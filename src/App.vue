@@ -5,14 +5,17 @@
     <div class="container">
       <router-view/>
     </div>
+
+    <loading></loading>
   </div>
 </template>
 
 <script>
-import { parseString } from 'xml2js'
-import { getFeeds } from '@/api/system'
 import system from '@/models/system'
+import config from '@/models/config'
 import systemCtrl from '@/ctrls/systemCtrl'
+import dataCtrl from '@/ctrls/dataCtrl'
+import Loading from '@/components/Loading.vue'
 
 export default {
   name: 'app',
@@ -25,32 +28,21 @@ export default {
     system.rssSources = systemCtrl.readRssSubscribes()
 
     this.getAllFeeds()
+    // 自动更新文章
+    setInterval(() => {
+      console.log('starting fetching all feeds chapters...')
+      this.getAllFeeds(true)
+    }, 1000 * 60 * 60 * config.autoFetchInterval)
   },
 
   methods: {
-    getAllFeeds () {
-      system.rssSources.forEach((feed, index) => {
-        if (feed.active) {
-          if (system.activeRssIndex === -1) {
-            // 赋值第一个激活的feed
-            system.activeRssIndex = index
-          }
-          getFeeds(feed.source).then(data => {
-            // console.log(data)
-            parseString(data, (err, result) => {
-              console.log(err, result)
-              if (err) {
-                return
-              }
-              systemCtrl.addChapters(result)
-              console.log(system.chapters)
-            })
-          }).catch(err => {
-            console.warn(err)
-          })
-        }
-      })
+    getAllFeeds (noLoading = false) {
+      dataCtrl.updateAllFeeds(noLoading)
     }
+  },
+
+  components: {
+    Loading
   }
 }
 </script>

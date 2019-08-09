@@ -22,23 +22,25 @@
 
 <script>
 import system from '@/models/system'
+import config from '@/models/config'
 
 export default {
   name: 'posterWall',
   data () {
     return {
       activeIndex: 0,
-      system
+      system,
+      config
     }
   },
   computed: {
     list () {
       if (this.system.chapters.length) {
         let list = []
-        if (this.system.chapters.length >= 5) {
+        if (this.system.chapters.length >= this.config.minPostersCount) {
           list = this.system.chapters.map(cat => cat.list[0])
         } else {
-          let count = Math.ceil(5 / this.system.chapters.length)
+          let count = Math.ceil(this.config.minPostersCount / this.system.chapters.length)
           list = this.system.chapters.reduce((soFar, cat) => {
             return [...soFar, ...cat.list.slice(0, count)]
           }, [])
@@ -54,7 +56,7 @@ export default {
   mounted () {
     setInterval(() => {
       this.autoToggle()
-    }, 5000)
+    }, 1000 * config.posterInterval)
   },
 
   methods: {
