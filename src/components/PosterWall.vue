@@ -17,6 +17,13 @@
         </div>
       </div>
     </div>
+
+    <div class="box-arrow box-left-arrow" @click="toggle(-1)">
+      <img src="../assets/arrow_left.png" alt="<">
+    </div>
+    <div class="box-arrow box-right-arrow" @click="toggle(1)">
+      <img src="../assets/arrow_right.png" alt=">">
+    </div>
   </section>
 </template>
 
@@ -55,7 +62,7 @@ export default {
 
   mounted () {
     setInterval(() => {
-      this.autoToggle()
+      this.toggle(1)
     }, 1000 * config.posterInterval)
   },
 
@@ -77,11 +84,16 @@ export default {
         })
       }
     },
-    autoToggle () {
-      if (this.list.length && this.activeIndex <= this.list.length - 2) {
-        this.activeIndex++
-      } else {
-        this.activeIndex = 0
+    toggle (slide) {
+      let targetIndex = this.activeIndex + slide
+      if (this.list.length) {
+        if (targetIndex > this.list.length - 1) {
+          targetIndex = 0
+        } else if (targetIndex < 0) {
+          targetIndex = this.list.length - 1
+        }
+
+        this.activeIndex = targetIndex
       }
     }
   }
@@ -90,6 +102,7 @@ export default {
 
 <style scoped lang="scss">
 .bed-poster-wall {
+  position: relative;
   height: 340px;
   background: #eee;
   overflow: hidden;
@@ -189,6 +202,35 @@ export default {
           }
         }
       }
+    }
+  }
+  .box-arrow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    background: rgb(201, 201, 201);
+    opacity: 0.4;
+    cursor: pointer;
+    user-select: none;
+    z-index: 1;
+    &.box-left-arrow {
+      left: 30px;
+      top: 40%;
+    }
+    &.box-right-arrow {
+      right: 30px;
+      top: 40%;
+    }
+    img {
+      height: 18px;
+    }
+    &:hover {
+      background: rgba(122, 122, 122, .6);
+      opacity: 0.9;
     }
   }
 }

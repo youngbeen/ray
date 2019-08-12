@@ -11,7 +11,7 @@
       Feeds ({{ activeFeeds.length }})
       <div class="btn" @click="syncAll()">update all</div>
     </div>
-    <div class="box-feed" :class="[feed.id === activeRssId ? 'active' : '']" v-for="(feed) in activeFeeds" :key="feed.id" @click="changeFeed(feed)">
+    <div class="box-feed" :class="[feed.id === activeRssId ? 'active' : '']" draggable v-for="(feed) in activeFeeds" :key="feed.id" @dragstart="handleDragstart($event, feed)" @dragover.prevent="handleDragover" @drop.prevent="handleDrop($event, feed)" @click="changeFeed(feed)">
       <img class="icon" :src="feed.icon" alt="">
       {{ feed.title }}
       <img class="fresh" src="../assets/sync.png" alt="update" @click.stop="handleSync(feed)">
@@ -27,6 +27,7 @@
 <script>
 import system from '@/models/system'
 import dataCtrl from '@/ctrls/dataCtrl'
+import systemCtrl from '@/ctrls/systemCtrl'
 
 export default {
   name: 'navigation',
@@ -68,6 +69,29 @@ export default {
     },
     syncAll () {
       dataCtrl.updateAllFeeds()
+    },
+    handleDragstart (e, feed) {
+      // console.log('start', index)
+      e.dataTransfer.dropEffect = 'move'
+      e.dataTransfer.setData('sourceFeed', feed)
+    },
+    handleDragover (e) {
+      // console.log('over', e)
+      e.dataTransfer.dropEffect = 'move'
+    },
+    handleDrop (e, feed) {
+      // console.log('drop', index)
+      e.dataTransfer.dropEffect = 'move'
+      // 变换位置
+      let sourceFeed = e.dataTransfer.getData('sourceFeed')
+      if (sourceFeed.id === feed.id) {
+        return
+      }
+      let sourceIndex = system.rssSources.findIndex(item => item.id === sourceFeed.id)
+      let item = system.rssSources.splice(sourceIndex, 1)[0]
+      let targetIndex = system.rssSources.findIndex(item => item.id === feed.id)
+      system.rssSources.splice(targetIndex, 0, item)
+      systemCtrl.saveRssSubscribes()
     },
     back () {
       this.$router.go(-1)
