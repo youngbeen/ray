@@ -81,7 +81,10 @@ export default {
           getFeeds(feed.source).then(data => {
             // console.log(data)
             system.loading = this.loading = false
-            parseString(data, (err, result) => {
+            parseString(data, {
+              trim: true,
+              ignoreAttrs: true
+            }, (err, result) => {
               console.log(err, result)
               if (err) {
                 window.alert('Connection failed! The feed source has some errors')
@@ -134,7 +137,10 @@ export default {
           getFeeds(system.rssSources[targetIndex].source).then(data => {
             // console.log(data)
             system.loading = this.loading = false
-            parseString(data, (err, result) => {
+            parseString(data, {
+              trim: true,
+              ignoreAttrs: true
+            }, (err, result) => {
               console.log(err, result)
               if (err) {
                 window.alert('Connection failed! The feed source has some errors')
@@ -157,7 +163,10 @@ export default {
         getFeeds(this.inputUrl).then(data => {
           // console.log(data)
           system.loading = this.loading = false
-          parseString(data, (err, result) => {
+          parseString(data, {
+            trim: true,
+            ignoreAttrs: true
+          }, (err, result) => {
             console.log(err, result)
             if (err) {
               window.alert('Connection failed! The feed source has some errors')

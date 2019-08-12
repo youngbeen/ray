@@ -15,7 +15,7 @@ let axios = base.axios
 // }
 export const getFeeds = params => {
   return axios({
-    method: 'post',
+    method: 'get',
     url: params
     // url: `${baseUrl}portal/upSdkConfig`,
     // data: params

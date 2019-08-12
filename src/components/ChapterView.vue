@@ -8,7 +8,7 @@
           <div class="desc">{{ chapter.plainDescription }}</div>
           <!-- <p v-html="chapter.description"></p> -->
         </div>
-        <div class="box-avatar" v-if="chapter.avatar" :style="{ backgroundImage: `url(${chapter.avatar})` }">
+        <div class="box-avatar" v-if="chapter.avatar" :style="{ backgroundImage: `url(${chapter.avatar})` }" @click.stop="preview(chapter)">
           <div class="mask">&nbsp;</div>
         </div>
       </div>
@@ -21,6 +21,8 @@
 
 <script>
 import { dateUtil } from '@youngbeen/angle-util'
+import { shell } from 'electron'
+import eventBus from '@/eventBus'
 import system from '@/models/system'
 
 export default {
@@ -53,13 +55,23 @@ export default {
   methods: {
     view (chapter) {
       let url = chapter.link || ''
-      console.log(url)
+      // console.log(url)
       if (url) {
-        this.$router.push({
-          name: 'read',
-          query: {
-            url: encodeURIComponent(url)
-          }
+        shell.openExternal(url)
+        // this.$router.push({
+        //   name: 'read',
+        //   query: {
+        //     url: encodeURIComponent(url)
+        //   }
+        // })
+      } else if (chapter.avatar) {
+        this.preview(chapter)
+      }
+    },
+    preview (chapter) {
+      if (chapter.avatar) {
+        eventBus.$emit('preview', {
+          image: chapter.avatar
         })
       }
     }
@@ -103,6 +115,9 @@ export default {
           margin-bottom: 8px;
           font-size: 17px;
           font-weight: 500;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
         .author-tip {
           margin-bottom: 6px;

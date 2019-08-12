@@ -3,7 +3,12 @@ import system from '@/models/system'
 
 export default {
   addRssSubscribes (result, source) {
-    let channel = result.rss.channel[0] || {}
+    let channel = {}
+    if (result.rss && result.rss.channel[0]) {
+      channel = result.rss.channel[0]
+    } else if (result.feed) {
+      channel = result.feed
+    }
     // console.log('md5', md5(`${result.rss.channel[0].title[0]}==${result.rss.channel[0].link[0]}`).toString())
     system.rssSources.push({
       id: md5(`${channel.title[0]}==${channel.link[0]}`).toString(),
@@ -11,21 +16,42 @@ export default {
       title: channel.title[0],
       source,
       link: channel.link[0],
-      description: channel.description[0],
-      icon: `${channel.link[0]}/favicon.ico`
+      description: channel.description && channel.description[0],
+      icon: channel.link[0] && `${channel.link[0]}/favicon.ico`
     })
   },
   addChapters (result) {
-    let channel = result.rss.channel[0] || {}
+    let channel = {}
+    if (result.rss && result.rss.channel[0]) {
+      channel = result.rss.channel[0]
+    } else if (result.feed) {
+      channel = result.feed
+    }
     let id = md5(`${channel.title[0]}==${channel.link[0]}`).toString()
     let feed = system.rssSources.find(item => item.id === id)
     if (!feed) {
       console.warn('添加的文章未找到对应的feed信息，无法继续操作')
       return
     }
-    let list = result.rss.channel[0].item || []
+    let list = []
+    if (channel.item) {
+      list = channel.item
+    } else if (channel.entry) {
+      list = channel.entry
+    }
     list = list.map(item => {
-      let description = item.description[0] || ''
+      let description = ''
+      if (item.description) {
+        description = item.description[0]
+      } else if (item.summary) {
+        description = item.summary[0]
+      }
+      let pubDate = ''
+      if (item.pubDate) {
+        pubDate = item.pubDate[0]
+      } else if (item.updated) {
+        pubDate = item.updated[0]
+      }
       let plainDescription = ''
       let avatar = ''
       if (description) {
@@ -52,14 +78,15 @@ export default {
           avatar = leftStr.split(quoteType)[1]
         }
       }
+      console.log(item.link[0])
       return {
         id: md5(`${item.title[0]}=!=${item.link[0]}`).toString(),
         title: item.title[0],
-        link: item.link[0].replace(/\s|\n|\r/g, ''),
+        link: item.link[0],
         plainDescription,
         avatar,
         description,
-        pubDate: item.pubDate[0] ? (new Date(item.pubDate[0])).getTime() : '',
+        pubDate: pubDate ? (new Date(pubDate)).getTime() : '',
         author: feed.title,
         icon: feed.icon
       }

@@ -6,6 +6,7 @@
       <router-view/>
     </div>
 
+    <image-preview></image-preview>
     <loading></loading>
   </div>
 </template>
@@ -15,6 +16,7 @@ import system from '@/models/system'
 import config from '@/models/config'
 import systemCtrl from '@/ctrls/systemCtrl'
 import dataCtrl from '@/ctrls/dataCtrl'
+import ImagePreview from '@/components/ImagePreview.vue'
 import Loading from '@/components/Loading.vue'
 
 export default {
@@ -42,6 +44,7 @@ export default {
   },
 
   components: {
+    ImagePreview,
     Loading
   }
 }
@@ -79,6 +82,7 @@ html, body {
   font-size: 12px;
   font-weight: 500;
   -webkit-app-region: drag;
+  user-select: none;
   z-index: 9999;
 }
 .container {

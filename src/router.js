@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
 import Feeds from './views/Feeds.vue'
-import Read from './views/Read.vue'
+// import Read from './views/Read.vue'
 import FeedsManage from './views/FeedsManage.vue'
 
 Vue.use(Router)
@@ -23,11 +23,11 @@ export default new Router({
       name: 'feeds',
       component: Feeds
     },
-    {
-      path: '/read',
-      name: 'read',
-      component: Read
-    },
+    // {
+    //   path: '/read',
+    //   name: 'read',
+    //   component: Read
+    // },
     {
       path: '/feedsManage',
       name: 'feedsManage',

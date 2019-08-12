@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import { shell } from 'electron'
 import system from '@/models/system'
 import PosterWall from '@/components/PosterWall'
 
@@ -77,12 +78,13 @@ export default {
       let url = chapter.link || ''
       // console.log(url)
       if (url) {
-        this.$router.push({
-          name: 'read',
-          query: {
-            url: encodeURIComponent(url)
-          }
-        })
+        shell.openExternal(url)
+        // this.$router.push({
+        //   name: 'read',
+        //   query: {
+        //     url: encodeURIComponent(url)
+        //   }
+        // })
       }
     },
     go (feed) {

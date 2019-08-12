@@ -24,7 +24,10 @@ export default {
       if (!noLoading) {
         system.loading = false
       }
-      parseString(data, (err, result) => {
+      parseString(data, {
+        trim: true,
+        ignoreAttrs: true
+      }, (err, result) => {
         console.log(err, result)
         if (err) {
           window.alert(`Updating failed! Feed(${feed.title}) source has some errors`)
