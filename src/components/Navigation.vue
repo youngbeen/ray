@@ -71,19 +71,19 @@ export default {
       dataCtrl.updateAllFeeds()
     },
     handleDragstart (e, feed) {
-      // console.log('start', index)
+      // console.log('start', feed)
       e.dataTransfer.dropEffect = 'move'
-      e.dataTransfer.setData('sourceFeed', feed)
+      e.dataTransfer.setData('sourceFeed', JSON.stringify(feed))
     },
     handleDragover (e) {
       // console.log('over', e)
       e.dataTransfer.dropEffect = 'move'
     },
     handleDrop (e, feed) {
-      // console.log('drop', index)
+      // console.log('drop', feed)
       e.dataTransfer.dropEffect = 'move'
       // 变换位置
-      let sourceFeed = e.dataTransfer.getData('sourceFeed')
+      let sourceFeed = JSON.parse(e.dataTransfer.getData('sourceFeed'))
       if (sourceFeed.id === feed.id) {
         return
       }
