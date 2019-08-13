@@ -1,10 +1,12 @@
 'use strict'
 
-import { app, protocol, BrowserWindow } from 'electron'
+import { app, protocol, BrowserWindow, Menu, ipcMain, dialog } from 'electron'
+import fs from 'fs'
 import {
   createProtocol
   // installVueDevtools
 } from 'vue-cli-plugin-electron-builder/lib'
+import { dateUtil } from '@youngbeen/angle-util'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -19,17 +21,100 @@ protocol.registerSchemesAsPrivileged([
   }
 ])
 
+// 侦听异步消息
+ipcMain.on('asynchronous-message', (event, arg) => {
+  // console.log(event, arg)
+  if (arg && arg.type === 'sys_export_file') {
+    // 下载数据
+    let filters = [{
+      name: 'ray_feeds_data',
+      extensions: ['json']
+    }]
+    dialog.showSaveDialog({
+      filters,
+      title: 'Export',
+      defaultPath: `ray_feeds_data_${dateUtil.formatDateTime('YYYYMMDD', new Date())}`,
+      buttonLabel: 'Export'
+    }).then(data => {
+      // console.log(data)
+      if (data.filePath) {
+        fs.writeFileSync(data.filePath, arg.content, 'utf8')
+      }
+    })
+  }
+  // event.reply('asynchronous-reply', 'got it')
+})
+
+// 导入数据功能
+function importData () {
+  dialog.showOpenDialog({
+    filters: [{
+      name: 'json file',
+      extensions: ['json']
+    }],
+    properties: ['openFile'],
+    buttonLabel: 'Import'
+  }, (filePaths) => {
+    if (filePaths && filePaths.length) {
+      let content = fs.readFileSync(filePaths[0])
+      // console.log(content.toString())
+      win.webContents.send('sys_importdata', content.toString())
+    }
+  })
+}
+
 function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({
     width: 1200,
-    height: 1000,
+    height: 800,
     titleBarStyle: 'hidden',
     webPreferences: {
       webSecurity: false,
       nodeIntegration: true
     }
   })
+
+  const customMenu = Menu.buildFromTemplate([
+    { role: 'appMenu' },
+    {
+      label: 'Edit',
+      submenu: [
+        { role: 'undo' },
+        { role: 'redo' },
+        { type: 'separator' },
+        { role: 'copy' },
+        { role: 'paste' },
+        { role: 'cut' },
+        { role: 'delete' }
+      ]
+    },
+    { role: 'windowMenu' },
+    {
+      label: 'Data',
+      submenu: [
+        {
+          label: 'Export Feeds Data as File',
+          click: () => {
+            win.webContents.send('sys_export_trigger')
+          }
+        },
+        {
+          label: 'Import Feeds Data via File',
+          click: () => {
+            importData()
+          }
+        }
+      ]
+    },
+    {
+      label: 'About',
+      submenu: [
+        { role: 'about' }
+      ]
+    }
+  ])
+  Menu.setApplicationMenu(customMenu)
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode

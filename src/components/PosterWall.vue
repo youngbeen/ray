@@ -11,17 +11,17 @@
         </div>
       </div>
 
-      <div class="box-poster lg sample-show" v-if="!list.length">
-        <div class="box-btn">
+      <div class="box-poster lg sample-show" v-if="!list.length || !system.rssSources.length">
+        <div class="box-btn" v-show="!system.rssSources.length">
           <div class="btn" @click="addFeed()">Add First Feed</div>
         </div>
       </div>
     </div>
 
-    <div class="box-arrow box-left-arrow" @click="toggle(-1)">
+    <div class="box-arrow box-left-arrow" @click="toggle(-1, true)">
       <img src="../assets/arrow_left.png" alt="<">
     </div>
-    <div class="box-arrow box-right-arrow" @click="toggle(1)">
+    <div class="box-arrow box-right-arrow" @click="toggle(1, true)">
       <img src="../assets/arrow_right.png" alt=">">
     </div>
   </section>
@@ -29,6 +29,7 @@
 
 <script>
 import { shell } from 'electron'
+import eventBus from '@/eventBus'
 import system from '@/models/system'
 import config from '@/models/config'
 
@@ -37,6 +38,7 @@ export default {
   data () {
     return {
       activeIndex: 0,
+      tc: null,
       system,
       config
     }
@@ -53,7 +55,6 @@ export default {
             return [...soFar, ...cat.list.slice(0, count)]
           }, [])
         }
-        // console.log(list)
         return list
       } else {
         return []
@@ -62,7 +63,7 @@ export default {
   },
 
   mounted () {
-    setInterval(() => {
+    this.tc = setInterval(() => {
       this.toggle(1)
     }, 1000 * config.posterInterval)
   },
@@ -84,9 +85,23 @@ export default {
         //     url: encodeURIComponent(url)
         //   }
         // })
+      } else if (chapter.avatar) {
+        // 无访问url，有预览图
+        this.preview(chapter)
       }
     },
-    toggle (slide) {
+    preview (chapter) {
+      if (chapter.avatar) {
+        eventBus.$emit('preview', {
+          image: chapter.avatar
+        })
+      }
+    },
+    toggle (slide, freezeAuto = false) {
+      if (freezeAuto) {
+        clearInterval(this.tc)
+        this.tc = null
+      }
       let targetIndex = this.activeIndex + slide
       if (this.list.length) {
         if (targetIndex > this.list.length - 1) {
@@ -96,6 +111,12 @@ export default {
         }
 
         this.activeIndex = targetIndex
+      }
+
+      if (!this.tc) {
+        this.tc = setInterval(() => {
+          this.toggle(1)
+        }, 1000 * config.posterInterval)
       }
     }
   }
@@ -216,6 +237,7 @@ export default {
     border-radius: 100%;
     background: rgb(201, 201, 201);
     opacity: 0.4;
+    transition: all 0.4s;
     cursor: pointer;
     user-select: none;
     z-index: 1;

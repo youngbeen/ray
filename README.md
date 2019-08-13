@@ -39,3 +39,7 @@ Ray使用源生的LS作为数据存储方式，将当前已存的rss源数据存
   }
 ]
 ```
+
+### `raySavedConfig`
+
+Ray使用源生的LS作为数据存储方式，将之前的配置信息存储在`raySavedConfig`下面，内容为完整JSON字符串，结构参考`models/config`

@@ -1,5 +1,6 @@
 import md5 from 'crypto-js/md5'
 import system from '@/models/system'
+import config from '@/models/config'
 
 export default {
   addRssSubscribes (result, source) {
@@ -78,7 +79,7 @@ export default {
           avatar = leftStr.split(quoteType)[1]
         }
       }
-      console.log(item.link[0])
+      // console.log(item.link[0])
       return {
         id: md5(`${item.title[0]}=!=${item.link[0]}`).toString(),
         title: item.title[0],
@@ -134,5 +135,16 @@ export default {
     //     icon: 'http://www.qdaily.com/favicon.ico'
     //   }
     // ]
+  },
+  saveConfig () {
+    window.localStorage.setItem('raySavedConfig', JSON.stringify(config))
+  },
+  readConfig () {
+    let data = window.localStorage.getItem('raySavedConfig') || ''
+    if (data) {
+      return JSON.parse(data)
+    } else {
+      return {}
+    }
   }
 }

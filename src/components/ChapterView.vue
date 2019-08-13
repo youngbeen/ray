@@ -65,6 +65,7 @@ export default {
         //   }
         // })
       } else if (chapter.avatar) {
+        // 无访问url，有预览图
         this.preview(chapter)
       }
     },

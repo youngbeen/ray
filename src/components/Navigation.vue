@@ -165,6 +165,7 @@ export default {
     color: #666;
     font-size: 13px;
     font-weight: 500;
+    transition: all 0.4s;
     cursor: pointer;
     user-select: none;
     .icon {

@@ -30,13 +30,13 @@
       <!-- 功能 -->
       <div class="box-seg">
         <!-- <div class="title">Feeds</div> -->
-        <div class="row" v-if="activeFeeds.length">
+        <div class="row" v-if="activeFeeds.length" @click="addFeed()">
           <img src="../assets/plus.png" alt="+">
-          <div class="text" @click="addFeed()">Add New Rss Feed</div>
+          <div class="text">Add New Rss Feed</div>
         </div>
-        <div class="row">
+        <div class="row" @click="goConfig()">
           <img src="../assets/gear.png" alt="">
-          <div class="text">System Config TODO</div>
+          <div class="text">System Config</div>
         </div>
       </div>
     </div>
@@ -45,6 +45,7 @@
 
 <script>
 import { shell } from 'electron'
+import eventBus from '@/eventBus'
 import system from '@/models/system'
 import PosterWall from '@/components/PosterWall'
 
@@ -85,6 +86,16 @@ export default {
         //     url: encodeURIComponent(url)
         //   }
         // })
+      } else if (chapter.avatar) {
+        // 无访问url，有预览图
+        this.preview(chapter)
+      }
+    },
+    preview (chapter) {
+      if (chapter.avatar) {
+        eventBus.$emit('preview', {
+          image: chapter.avatar
+        })
       }
     },
     go (feed) {
@@ -99,6 +110,11 @@ export default {
     addFeed () {
       this.$router.push({
         name: 'feedsManage'
+      })
+    },
+    goConfig () {
+      this.$router.push({
+        name: 'config'
       })
     }
   },
@@ -155,11 +171,10 @@ export default {
         align-items: center;
         height: 36px;
         padding: 0 12px;
+        border-bottom: 1px solid #eee;
+        transition: all 0.4s;
         cursor: pointer;
         user-select: none;
-        &:not(:last-child) {
-          border-bottom: 1px solid #eee;
-        }
         img {
           margin-right: 6px;
           max-width: 14px;

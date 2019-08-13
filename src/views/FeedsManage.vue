@@ -16,8 +16,14 @@
     <!-- 列表 -->
     <div class="box-list">
       <div class="row-title">
-        <div class="btn" :class="[selectedActiveType && 'active']" @click="toggleType(true)">Active Feeds</div>
-        <div class="btn" :class="[!selectedActiveType && 'active']" @click="toggleType(false)">Inactive Feeds</div>
+        <div class="btn" :class="[selectedActiveType && 'active']" @click="toggleType(true)">
+          Active Feeds
+          <span class="badge">{{ system.rssSources.filter(item => item.active).length }}</span>
+        </div>
+        <div class="btn" :class="[!selectedActiveType && 'active']" @click="toggleType(false)">
+          Inactive Feeds
+          <span class="badge">{{ system.rssSources.filter(item => !item.active).length }}</span>
+        </div>
       </div>
 
       <div class="row" v-for="feed in currentList" :key="feed.id">
@@ -267,6 +273,12 @@ export default {
         &.active {
           color: #333;
           border-bottom: 2px solid #333;
+        }
+        .badge {
+          padding: 0 6px;
+          border-radius: 12px;
+          background: #eee;
+          font-size: 11px;
         }
       }
     }
