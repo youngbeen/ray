@@ -21,7 +21,6 @@
 
 <script>
 import { dateUtil } from '@youngbeen/angle-util'
-import { shell } from 'electron'
 import eventBus from '@/eventBus'
 import system from '@/models/system'
 
@@ -55,15 +54,15 @@ export default {
   methods: {
     view (chapter) {
       let url = chapter.link || ''
-      // console.log(url)
+      let content = chapter.description || ''
       if (url) {
-        shell.openExternal(url)
-        // this.$router.push({
-        //   name: 'read',
-        //   query: {
-        //     url: encodeURIComponent(url)
-        //   }
-        // })
+        window.localStorage.setItem('rayPreviewContent', JSON.stringify(content))
+        this.$router.push({
+          name: 'read',
+          query: {
+            url: encodeURIComponent(url)
+          }
+        })
       } else if (chapter.avatar) {
         // 无访问url，有预览图
         this.preview(chapter)
