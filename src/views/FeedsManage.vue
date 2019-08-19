@@ -93,7 +93,10 @@ export default {
             }, (err, result) => {
               console.log(err, result)
               if (err) {
-                window.alert('Connection failed! The feed source has some errors')
+                let notify = new Notification('Connection failed!', {
+                  body: `The feed source has some errors`
+                })
+                notify.onclick = () => {}
                 return
               }
               system.rssSources[index].active = value
@@ -103,7 +106,10 @@ export default {
           }).catch(err => {
             console.warn(err)
             system.loading = this.loading = false
-            window.alert('Connection failed!')
+            let notify = new Notification('Connection failed!', {
+              body: `Connection failed!`
+            })
+            notify.onclick = () => {}
           })
         } else {
           // unfollow feed
@@ -149,7 +155,10 @@ export default {
             }, (err, result) => {
               console.log(err, result)
               if (err) {
-                window.alert('Connection failed! The feed source has some errors')
+                let notify = new Notification('Connection failed!', {
+                  body: `The feed source has some errors`
+                })
+                notify.onclick = () => {}
                 return
               }
               system.rssSources[targetIndex].active = true
@@ -159,7 +168,10 @@ export default {
           }).catch(err => {
             console.warn(err)
             system.loading = this.loading = false
-            window.alert('Connection failed!')
+            let notify = new Notification('Connection failed!', {
+              body: `Connection failed!`
+            })
+            notify.onclick = () => {}
           })
         }
         this.inputUrl = ''
@@ -175,7 +187,10 @@ export default {
           }, (err, result) => {
             console.log(err, result)
             if (err) {
-              window.alert('Connection failed! The feed source has some errors')
+              let notify = new Notification('Connection failed!', {
+                body: `The feed source has some errors`
+              })
+              notify.onclick = () => {}
               return
             }
             systemCtrl.addRssSubscribes(result, this.inputUrl)
@@ -186,7 +201,10 @@ export default {
         }).catch(err => {
           console.warn(err)
           system.loading = this.loading = false
-          window.alert('Connection failed! Please check the source url')
+          let notify = new Notification('Connection failed!', {
+            body: `Please check the source url`
+          })
+          notify.onclick = () => {}
         })
       }
     },

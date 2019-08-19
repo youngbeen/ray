@@ -64,7 +64,7 @@ export default {
       height: 100%;
     }
     div {
-      padding-top: 30px;
+      padding: 30px;
     }
   }
   .btn-back {

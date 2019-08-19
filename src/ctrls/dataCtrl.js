@@ -30,7 +30,11 @@ export default {
       }, (err, result) => {
         console.log(err, result)
         if (err) {
-          window.alert(`Updating failed! Feed(${feed.title}) source has some errors`)
+          let notify = new Notification('Updating failed!', {
+            body: `Feed(${feed.title}) source has some errors`
+          })
+          notify.onclick = () => {
+          }
           return
         }
         systemCtrl.removeChapters(feed.id)
@@ -41,7 +45,10 @@ export default {
       if (!noLoading) {
         system.loading = false
       }
-      window.alert(`Updating Feed(${feed.title}) failed!`)
+      let notify = new Notification('Updating failed!', {
+        body: `Updating Feed(${feed.title}) failed!`
+      })
+      notify.onclick = () => {}
     })
   }
 }
