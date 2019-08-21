@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import eventBus from '@/eventBus'
 import system from '@/models/system'
 import dataCtrl from '@/ctrls/dataCtrl'
 import systemCtrl from '@/ctrls/systemCtrl'
@@ -54,6 +55,11 @@ export default {
       if (feed.id !== this.activeRssId) {
         let index = system.rssSources.findIndex(item => item.id === feed.id)
         system.activeRssIndex = index
+        setTimeout(() => {
+          eventBus.$emit('scrollToTop', {
+            target: 'chapterView'
+          })
+        }, 100)
       }
     },
     addFeed () {

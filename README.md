@@ -22,6 +22,12 @@ npm run lint
 
 ## Data Storage
 
+### SS
+
+| Key         | Description     |
+| :---------- | :-------------  |
+| feedsViewY  | feeds页面浏览的位置y |
+
 ### `raySavedRssFeeds`
 
 Ray使用源生的LS作为数据存储方式，将当前已存的rss源数据存储在`raySavedRssFeeds`下面，内容为完整JSON字符串，结构如下：

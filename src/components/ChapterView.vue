@@ -1,5 +1,7 @@
 <template>
   <section class="bed-chapter-view">
+    <div id="chapterview-lighthouse"></div>
+
     <div class="bed-chapter">
       <div class="box-chapter" v-show="currentFeedChapters.length" v-for="chapter in currentFeedChapters" :key="chapter.id" @click="view(chapter)">
         <div class="content" :class="[chapter.avatar ? 'padded' : '']">
@@ -51,8 +53,24 @@ export default {
     }
   },
 
+  mounted () {
+    let oldY = parseInt(window.sessionStorage.getItem('feedsViewY'))
+    window.sessionStorage.removeItem('feedsViewY')
+    if (oldY) {
+      document.querySelector('.bed-chapter-view').scrollTo(0, oldY)
+    }
+
+    eventBus.$on('scrollToTop', params => {
+      if (params.target === 'chapterView') {
+        // console.log('should scroll')
+        document.querySelector('#chapterview-lighthouse').scrollIntoView()
+      }
+    })
+  },
+
   methods: {
     view (chapter) {
+      window.sessionStorage.setItem('feedsViewY', document.querySelector('.bed-chapter-view').scrollTop)
       let url = chapter.link || ''
       let content = chapter.description || ''
       if (url) {
