@@ -3,7 +3,7 @@
     <div id="chapterview-lighthouse"></div>
 
     <div class="bed-chapter">
-      <div class="box-chapter" v-show="currentFeedChapters.length" v-for="chapter in currentFeedChapters" :key="chapter.id" @click="view(chapter)">
+      <div class="box-chapter" v-show="displayChapters.length" v-for="chapter in displayChapters" :key="chapter.id" @click="view(chapter)">
         <div class="content" :class="[chapter.avatar ? 'padded' : '']">
           <div class="title">{{ chapter.title }}</div>
           <div class="author-tip">{{ chapter.pubDateText }}</div>
@@ -15,9 +15,8 @@
         </div>
       </div>
 
-      <div class="no-data" v-show="!currentFeedChapters.length">No chapters found</div>
+      <div class="no-data" v-show="!displayChapters.length">No chapters found</div>
     </div>
-
   </section>
 </template>
 
@@ -32,10 +31,15 @@ export default {
   name: 'chapterView',
   data () {
     return {
+      savedY: 0, // 保存的滑动top y值
+      pageSize: 20,
       system
     }
   },
   computed: {
+    displayChapters () {
+      return this.currentFeedChapters.slice(0, this.pageSize * this.system.page)
+    },
     currentFeedChapters () {
       if (this.system.chapters.length && this.system.rssSources.filter(f => f.active).length && this.system.activeRssIndex > -1) {
         let currentChannel = this.system.chapters.find(item => item.rssId === this.system.rssSources[this.system.activeRssIndex].id)
@@ -68,6 +72,30 @@ export default {
         document.querySelector('#chapterview-lighthouse').scrollIntoView()
       }
     })
+
+    document.querySelector('.bed-chapter-view').onscroll = () => {
+      let scrollTop = document.querySelector('.bed-chapter-view').scrollTop
+      let scrollHeight = document.querySelector('.bed-chapter-view').scrollHeight
+      let clientHeight = document.querySelector('.bed-chapter-view').clientHeight
+      if (scrollTop <= this.savedY) {
+        // 下滑中，不需要触发
+      } else {
+        // 上滑中，可能触发
+        if (scrollHeight && clientHeight) {
+          let maxScroll = scrollHeight - clientHeight
+          if (scrollTop > maxScroll - 10) {
+            // console.log('reached')
+            this.handleLoadMore()
+          }
+        }
+      }
+      this.savedY = scrollTop
+    }
+  },
+
+  beforeDestroy () {
+    eventBus.$off('scrollToTop')
+    document.querySelector('.bed-chapter-view').onscroll = null
   },
 
   methods: {
@@ -99,6 +127,11 @@ export default {
         eventBus.$emit('preview', {
           image: chapter.avatar
         })
+      }
+    },
+    handleLoadMore () {
+      if (Math.ceil(this.currentFeedChapters.length / this.pageSize) > system.page) {
+        system.page++
       }
     }
   }

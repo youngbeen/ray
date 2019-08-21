@@ -55,6 +55,7 @@ export default {
       if (feed.id !== this.activeRssId) {
         let index = system.rssSources.findIndex(item => item.id === feed.id)
         system.activeRssIndex = index
+        system.page = 1
         setTimeout(() => {
           eventBus.$emit('scrollToTop', {
             target: 'chapterView'

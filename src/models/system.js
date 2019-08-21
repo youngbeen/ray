@@ -12,6 +12,7 @@ export default {
     //   icon: ''
     // }
   ],
+  page: 1,
   chapters: [
     // {
     //   rssId: '',

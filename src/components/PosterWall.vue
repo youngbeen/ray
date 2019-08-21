@@ -188,7 +188,7 @@ export default {
         bottom: 0;
         right: 0;
         padding: 32px 6px 6px;
-        background: linear-gradient(0deg, rgba(255, 255, 255, .9), rgba(255, 255, 255, .0));
+        background: linear-gradient(0deg, #fff 0%, rgba(255, 255, 255, .9) 30%, rgba(255, 255, 255, .0) 100%);
         z-index: 1;
         .title {
           color: #000;
