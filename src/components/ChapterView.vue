@@ -23,8 +23,10 @@
 
 <script>
 import { dateUtil } from '@youngbeen/angle-util'
+import { shell } from 'electron'
 import eventBus from '@/eventBus'
 import system from '@/models/system'
+import config from '@/models/config'
 
 export default {
   name: 'chapterView',
@@ -70,17 +72,23 @@ export default {
 
   methods: {
     view (chapter) {
-      window.sessionStorage.setItem('feedsViewY', document.querySelector('.bed-chapter-view').scrollTop)
       let url = chapter.link || ''
       let content = chapter.description || ''
       if (url) {
-        window.localStorage.setItem('rayPreviewContent', JSON.stringify(content))
-        this.$router.push({
-          name: 'read',
-          query: {
-            url: encodeURIComponent(url)
-          }
-        })
+        if (config.peferOriginal) {
+          // 使用浏览器打开
+          shell.openExternal(url)
+        } else {
+          // 使用app内浏览访问
+          window.sessionStorage.setItem('feedsViewY', document.querySelector('.bed-chapter-view').scrollTop)
+          window.localStorage.setItem('rayPreviewContent', JSON.stringify(content))
+          this.$router.push({
+            name: 'read',
+            query: {
+              url: encodeURIComponent(url)
+            }
+          })
+        }
       } else if (chapter.avatar) {
         // 无访问url，有预览图
         this.preview(chapter)

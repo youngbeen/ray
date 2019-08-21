@@ -92,6 +92,13 @@ export default {
         icon: feed.icon
       }
     })
+    // NOTE 针对某些比较“流氓”的feed，始终返回当前时间作为pubDate的，统一重置为空，避免“霸占”最新列表
+    if (list.length > 2 && list[0].pubDate === list[1].pubDate && list[0].pubDate === list[2].pubDate) {
+      list = list.map(item => {
+        item.pubDate = ''
+        return item
+      })
+    }
     system.chapters.push({
       rssId: feed.id,
       list

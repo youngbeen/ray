@@ -9,6 +9,13 @@
 
     <div class="bed-config">
       <div class="box-config">
+        <div class="title">Chapter Reading Peference</div>
+        <input type="radio" id="pefer-original-false" :value="false" v-model="config.peferOriginal">
+        <label for="pefer-original-false">Read in app (default)</label>
+        <input type="radio" id="pefer-original-true" :value="true" v-model="config.peferOriginal">
+        <label for="pefer-original-true">Read in browser</label>
+      </div>
+      <div class="box-config">
         <div class="title">Minimum Posters Number</div>
         <input type="radio" id="min-poster-number-5" :value="5" v-model="config.minPostersCount">
         <label for="min-poster-number-5">5 (default)</label>
