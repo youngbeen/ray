@@ -35,7 +35,7 @@ export default {
     if (query.url) {
       this.url = decodeURIComponent(query.url)
     }
-    this.content = JSON.parse(window.localStorage.getItem('rayPreviewContent'))
+    this.content = '<style>img{max-width:1000px;max-height:800px;}</style>' + JSON.parse(window.localStorage.getItem('rayPreviewContent'))
   },
 
   methods: {

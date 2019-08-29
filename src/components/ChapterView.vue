@@ -95,7 +95,9 @@ export default {
 
   beforeDestroy () {
     eventBus.$off('scrollToTop')
-    document.querySelector('.bed-chapter-view').onscroll = null
+    if (document.querySelector('.bed-chapter-view')) {
+      document.querySelector('.bed-chapter-view').onscroll = null
+    }
   },
 
   methods: {
