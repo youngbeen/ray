@@ -3,14 +3,20 @@
     <div id="chapterview-lighthouse"></div>
 
     <div class="bed-chapter">
-      <div class="box-chapter" v-show="displayChapters.length" v-for="chapter in displayChapters" :key="chapter.id" @click="view(chapter)">
-        <div class="content" :class="[chapter.avatar ? 'padded' : '']">
-          <div class="title">{{ chapter.title }}</div>
-          <div class="desc">{{ chapter.plainDescription }}</div>
-          <div class="author-tip">{{ chapter.pubDateText }}</div>
-          <!-- <p v-html="chapter.description"></p> -->
+      <div class="chapter-item" v-for="chapter in displayChapters" :key="chapter.id">
+        <div class="box-chapter" @click="view(chapter)">
+          <div class="content" :class="[chapter.avatar ? 'padded' : '']">
+            <div class="title">{{ chapter.title }}</div>
+            <div class="desc">{{ chapter.plainDescription }}</div>
+            <div class="author-tip">{{ chapter.pubDateText }}</div>
+            <!-- <p v-html="chapter.description"></p> -->
+          </div>
+          <div class="box-avatar" v-if="chapter.avatar" :style="{ backgroundImage: `url(${chapter.avatar})` }" @click.stop="preview(chapter)">
+          </div>
         </div>
-        <div class="box-avatar" v-if="chapter.avatar" :style="{ backgroundImage: `url(${chapter.avatar})` }" @click.stop="preview(chapter)">
+
+        <div class="btn-view" :class="[!chapter.link && 'invalid']" @click.stop="viewOriginal(chapter)">
+          <img src="../assets/earth.png" alt="">
         </div>
       </div>
 
@@ -126,6 +132,11 @@ export default {
         this.preview(chapter)
       }
     },
+    viewOriginal (chapter) {
+      if (chapter && chapter.link) {
+        shell.openExternal(chapter.link)
+      }
+    },
     preview (chapter) {
       if (chapter.avatar) {
         eventBus.$emit('preview', {
@@ -151,73 +162,104 @@ export default {
   box-shadow: -1px 0px 18px 1px rgba(122, 122, 122, .2);
   overflow-y: auto;
   .bed-chapter {
-    padding: 16px 72px 16px 36px;
-    .box-chapter {
+    padding: 16px 36px;
+    .chapter-item {
       position: relative;
       left: 0;
-      padding: 18px 24px;
-      // border-bottom: 1px solid #eee;
-      // border-radius: 6px;
-      background: #fff;
-      color: #555;
-      // opacity: 0.8;
+      padding-right: 36px;
+      transition: all 0.4s;
       cursor: pointer;
-      user-select: none;
-      transition: all 0.2s;
-      overflow: hidden;
-      box-shadow: 0px 0px 4px 1px rgba(122, 122, 122, .2);
       &:not(:last-child) {
         margin-bottom: 16px;
       }
-      &:hover {
-        left: 2px;
-        // background: linear-gradient(45deg, #fff, #ebeaac);
-        color: #333;
-        box-shadow: 3px 2px 10px 1px rgba(122, 122, 122, .3);
-        // opacity: 1;
+      .box-chapter {
+        position: relative;
+        padding: 18px 24px;
+        // border-bottom: 1px solid #eee;
+        // border-radius: 6px;
+        background: #fff;
+        color: #555;
+        // opacity: 0.8;
+        user-select: none;
+        box-shadow: 0px 0px 4px 1px rgba(122, 122, 122, .2);
+        transition: all 0.2s;
+        overflow: hidden;
+        z-index: 2;
+        .box-avatar {
+          position: absolute;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          width: 200px;
+          // height: 70px;
+          // background: red;
+          background-repeat: no-repeat;
+          background-position: center center;
+          background-size: cover;
+          // .mask {
+          //   width: 30px;
+          //   height: 100%;
+          //   background: linear-gradient(90deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0));
+          // }
+        }
+        .content {
+          &.padded {
+            margin-left: 190px;
+          }
+          .title {
+            margin-bottom: 8px;
+            font-size: 17px;
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+          .desc {
+            margin-bottom: 10px;
+            font-size: 13px;
+            display: -webkit-box;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+          }
+          .author-tip {
+            color: #aaa;
+            text-align: right;
+            font-size: 11px;
+          }
+        }
       }
-      .box-avatar {
+      .btn-view {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         position: absolute;
-        left: 0;
+        right: 40px;
         top: 0;
         bottom: 0;
-        width: 200px;
-        // height: 70px;
-        // background: red;
-        background-repeat: no-repeat;
-        background-position: center center;
-        background-size: cover;
-        // .mask {
-        //   width: 30px;
-        //   height: 100%;
-        //   background: linear-gradient(90deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0));
-        // }
+        width: 40px;
+        background: #b2cbe6;
+        opacity: 0;
+        cursor: pointer;
+        transition: all 0.4s;
+        z-index: 1;
+        img {
+          width: 20px;
+        }
       }
-      .content {
-        &.padded {
-          margin-left: 190px;
+      &:hover {
+        left: 2px;
+        .box-chapter {
+          color: #333;
+          box-shadow: 3px 2px 10px 1px rgba(122, 122, 122, .3);
         }
-        .title {
-          margin-bottom: 8px;
-          font-size: 17px;
-          font-weight: 500;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
-        .desc {
-          margin-bottom: 10px;
-          font-size: 13px;
-          display: -webkit-box;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-        }
-        .author-tip {
-          color: #aaa;
-          text-align: right;
-          font-size: 11px;
+        .btn-view {
+          right: 0;
+          opacity: 1;
+          &.invalid {
+            opacity: 0;
+          }
         }
       }
     }

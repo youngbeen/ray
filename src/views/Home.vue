@@ -44,10 +44,8 @@
 </template>
 
 <script>
-import { shell } from 'electron'
 import eventBus from '@/eventBus'
 import system from '@/models/system'
-import config from '@/models/config'
 import PosterWall from '@/components/PosterWall'
 
 export default {
@@ -79,10 +77,7 @@ export default {
     view (chapter) {
       let url = chapter.link || ''
       let content = chapter.description || ''
-      if (config.peferOriginal && url) {
-        // 使用浏览器打开
-        shell.openExternal(url)
-      } else if (content) {
+      if (content) {
         // 使用app内浏览访问
         window.localStorage.setItem('rayPreviewContent', JSON.stringify(content))
         system.readingChapter = {

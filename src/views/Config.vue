@@ -8,13 +8,13 @@
     </div>
 
     <div class="bed-config">
-      <div class="box-config">
+      <!-- <div class="box-config">
         <div class="title">Chapter Reading Peference</div>
         <input type="radio" id="pefer-original-false" :value="false" v-model="config.peferOriginal">
         <label for="pefer-original-false">Read in app (default)</label>
         <input type="radio" id="pefer-original-true" :value="true" v-model="config.peferOriginal">
         <label for="pefer-original-true">Read in browser</label>
-      </div>
+      </div> -->
       <div class="box-config">
         <div class="title">Minimum Posters Number</div>
         <input type="radio" id="min-poster-number-5" :value="5" v-model="config.minPostersCount">
@@ -57,7 +57,6 @@ export default {
     'config': {
       handler: () => {
         // 当配置更改时，保存配置
-        console.log('config changed')
         systemCtrl.saveConfig()
       },
       deep: true
