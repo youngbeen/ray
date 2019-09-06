@@ -7,9 +7,13 @@
       </div>
     </div>
 
-    <div class="title">
+    <div class="title" @mouseover="handleMouseover()" @mouseout="handleMouseout()">
       Feeds ({{ activeFeeds.length }})
-      <div class="btn" @click="syncAll()">update all</div>
+      <div class="box-btns" :style="{ 'opacity': isTitleFocus ? '1' : '0' }">
+        <div class="btn" @click="addFeed()">manage</div>
+        |
+        <div class="btn" @click="syncAll()">update all</div>
+      </div>
     </div>
     <div class="box-feed" :class="[feed.id === activeRssId ? 'active' : '']" draggable v-for="(feed) in activeFeeds" :key="feed.id" @dragstart="handleDragstart($event, feed)" @dragover.prevent="handleDragover" @drop.prevent="handleDrop($event, feed)" @click="changeFeed(feed)">
       <img class="icon" :src="feed.icon" alt="">
@@ -34,6 +38,7 @@ export default {
   name: 'navigation',
   data () {
     return {
+      isTitleFocus: false,
       system
     }
   },
@@ -102,6 +107,12 @@ export default {
     },
     back () {
       this.$router.go(-1)
+    },
+    handleMouseover () {
+      this.isTitleFocus = true
+    },
+    handleMouseout () {
+      this.isTitleFocus = false
     }
   }
 }
@@ -122,8 +133,9 @@ export default {
       display: flex;
       align-items: center;
       // height: 30px;
-      border-bottom-right-radius: 8px;
       padding: 6px 12px;
+      border-bottom-right-radius: 8px;
+      transition: all 0.4s;
       cursor: pointer;
       user-select: none;
       .arrow {
@@ -146,19 +158,25 @@ export default {
     border-bottom: 1px solid #eee;
     font-size: 14px;
     font-weight: 500;
-    .btn {
+    .box-btns {
       position: absolute;
       right: 0;
       top: 0;
+      display: flex;
       padding: 0 12px;
-      // background: red;
-      color: rgb(102, 102, 102);
-      font-size: 12px;
-      font-weight: normal;
-      cursor: pointer;
-      user-select: none;
-      &:hover {
-        color: #a7a844;
+      color: #aaa;
+      transition: all 0.4s;
+      .btn {
+        margin: 0 3px;
+        // background: red;
+        color: rgb(102, 102, 102);
+        font-size: 12px;
+        font-weight: normal;
+        cursor: pointer;
+        user-select: none;
+        &:hover {
+          color: #a7a844;
+        }
       }
     }
   }
@@ -187,6 +205,7 @@ export default {
       top: 8px;
       width: 18px;
       opacity: 0;
+      transition: all 0.2s;
     }
     .arrow {
       position: absolute;

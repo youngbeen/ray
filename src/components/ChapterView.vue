@@ -6,12 +6,11 @@
       <div class="box-chapter" v-show="displayChapters.length" v-for="chapter in displayChapters" :key="chapter.id" @click="view(chapter)">
         <div class="content" :class="[chapter.avatar ? 'padded' : '']">
           <div class="title">{{ chapter.title }}</div>
-          <div class="author-tip">{{ chapter.pubDateText }}</div>
           <div class="desc">{{ chapter.plainDescription }}</div>
+          <div class="author-tip">{{ chapter.pubDateText }}</div>
           <!-- <p v-html="chapter.description"></p> -->
         </div>
         <div class="box-avatar" v-if="chapter.avatar" :style="{ backgroundImage: `url(${chapter.avatar})` }" @click.stop="preview(chapter)">
-          <div class="mask">&nbsp;</div>
         </div>
       </div>
 
@@ -104,23 +103,26 @@ export default {
     view (chapter) {
       let url = chapter.link || ''
       let content = chapter.description || ''
-      if (url) {
-        if (config.peferOriginal) {
-          // 使用浏览器打开
-          shell.openExternal(url)
-        } else {
-          // 使用app内浏览访问
-          window.sessionStorage.setItem('feedsViewY', document.querySelector('.bed-chapter-view').scrollTop)
-          window.localStorage.setItem('rayPreviewContent', JSON.stringify(content))
-          this.$router.push({
-            name: 'read',
-            query: {
-              url: encodeURIComponent(url)
-            }
-          })
+      if (config.peferOriginal && url) {
+        // 使用浏览器打开
+        shell.openExternal(url)
+      } else if (content) {
+        // 使用app内浏览访问
+        window.sessionStorage.setItem('feedsViewY', document.querySelector('.bed-chapter-view').scrollTop)
+        window.localStorage.setItem('rayPreviewContent', JSON.stringify(content))
+        system.readingChapter = {
+          icon: chapter.icon,
+          author: chapter.author,
+          title: chapter.title
         }
+        this.$router.push({
+          name: 'read',
+          query: {
+            url: encodeURIComponent(url)
+          }
+        })
       } else if (chapter.avatar) {
-        // 无访问url，有预览图
+        // 有预览图
         this.preview(chapter)
       }
     },
@@ -149,28 +151,51 @@ export default {
   box-shadow: -1px 0px 18px 1px rgba(122, 122, 122, .2);
   overflow-y: auto;
   .bed-chapter {
-    padding: 16px 16px;
+    padding: 16px 72px 16px 36px;
     .box-chapter {
       position: relative;
+      left: 0;
       padding: 18px 24px;
-      border-bottom: 1px solid #eee;
+      // border-bottom: 1px solid #eee;
       // border-radius: 6px;
       background: #fff;
-      color: #333;
+      color: #555;
       // opacity: 0.8;
       cursor: pointer;
       user-select: none;
-      transition: all 0.4s;
+      transition: all 0.2s;
       overflow: hidden;
+      box-shadow: 0px 0px 4px 1px rgba(122, 122, 122, .2);
+      &:not(:last-child) {
+        margin-bottom: 16px;
+      }
       &:hover {
-        background: linear-gradient(45deg, #fff, #ebeaac);
-        color: #000;
-        // box-shadow: 1px 1px 18px 1px rgba(122, 122, 122, .2);
+        left: 2px;
+        // background: linear-gradient(45deg, #fff, #ebeaac);
+        color: #333;
+        box-shadow: 3px 2px 10px 1px rgba(122, 122, 122, .3);
         // opacity: 1;
+      }
+      .box-avatar {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 200px;
+        // height: 70px;
+        // background: red;
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: cover;
+        // .mask {
+        //   width: 30px;
+        //   height: 100%;
+        //   background: linear-gradient(90deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0));
+        // }
       }
       .content {
         &.padded {
-          margin-right: 90px;
+          margin-left: 190px;
         }
         .title {
           margin-bottom: 8px;
@@ -180,33 +205,19 @@ export default {
           text-overflow: ellipsis;
           white-space: nowrap;
         }
-        .author-tip {
-          margin-bottom: 6px;
-          color: #aaa;
-          font-size: 12px;
-        }
         .desc {
+          margin-bottom: 10px;
           font-size: 13px;
+          display: -webkit-box;
           overflow: hidden;
           text-overflow: ellipsis;
-          white-space: nowrap;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
         }
-      }
-      .box-avatar {
-        position: absolute;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        width: 100px;
-        // height: 70px;
-        // background: red;
-        background-repeat: no-repeat;
-        background-position: center center;
-        background-size: cover;
-        .mask {
-          width: 30px;
-          height: 100%;
-          background: linear-gradient(90deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0));
+        .author-tip {
+          color: #aaa;
+          text-align: right;
+          font-size: 11px;
         }
       }
     }

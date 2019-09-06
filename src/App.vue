@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="title-bar">Ray</div>
+    <title-bar></title-bar>
 
     <div class="container">
       <router-view/>
@@ -17,6 +17,7 @@ import system from '@/models/system'
 import config from '@/models/config'
 import systemCtrl from '@/ctrls/systemCtrl'
 import dataCtrl from '@/ctrls/dataCtrl'
+import TitleBar from '@/components/TitleBar.vue'
 import ImagePreview from '@/components/ImagePreview.vue'
 import Loading from '@/components/Loading.vue'
 
@@ -82,6 +83,7 @@ export default {
   },
 
   components: {
+    TitleBar,
     ImagePreview,
     Loading
   }
@@ -102,26 +104,12 @@ html, body {
   width: 100%;
   height: 100%;
   font-size: 14px;
+  cursor: default;
   // font-family: 'Avenir', Helvetica, Arial, sans-serif;
   // -webkit-font-smoothing: antialiased;
   // -moz-osx-font-smoothing: grayscale;
   // text-align: center;
   // color: #2c3e50;
-}
-.title-bar {
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 22px;
-  line-height: 22px;
-  background: #fff;
-  text-align: center;
-  font-size: 12px;
-  font-weight: 500;
-  -webkit-app-region: drag;
-  user-select: none;
-  z-index: 9999;
 }
 .container {
   height: calc(100% - 22px);

@@ -1,5 +1,10 @@
 export default {
   loading: false,
+  readingChapter: {
+    icon: '',
+    author: '',
+    title: ''
+  },
   activeRssIndex: -1,
   rssSources: [
     // {

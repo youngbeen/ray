@@ -80,8 +80,9 @@ export default {
       display: flex;
       align-items: center;
       // height: 30px;
-      border-bottom-right-radius: 8px;
       padding: 6px 12px;
+      border-bottom-right-radius: 8px;
+      transition: all 0.4s;
       cursor: pointer;
       user-select: none;
       .arrow {

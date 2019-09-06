@@ -79,22 +79,25 @@ export default {
     view (chapter) {
       let url = chapter.link || ''
       let content = chapter.description || ''
-      if (url) {
-        if (config.peferOriginal) {
-          // 使用浏览器打开
-          shell.openExternal(url)
-        } else {
-          // 使用app内浏览访问
-          window.localStorage.setItem('rayPreviewContent', JSON.stringify(content))
-          this.$router.push({
-            name: 'read',
-            query: {
-              url: encodeURIComponent(url)
-            }
-          })
+      if (config.peferOriginal && url) {
+        // 使用浏览器打开
+        shell.openExternal(url)
+      } else if (content) {
+        // 使用app内浏览访问
+        window.localStorage.setItem('rayPreviewContent', JSON.stringify(content))
+        system.readingChapter = {
+          icon: chapter.icon,
+          author: chapter.author,
+          title: chapter.title
         }
+        this.$router.push({
+          name: 'read',
+          query: {
+            url: encodeURIComponent(url)
+          }
+        })
       } else if (chapter.avatar) {
-        // 无访问url，有预览图
+        // 有预览图
         this.preview(chapter)
       }
     },
