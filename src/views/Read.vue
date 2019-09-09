@@ -48,7 +48,7 @@ export default {
         })
       })
       links.forEach((item) => {
-        originalContent = originalContent.replace(/<a [^>]*href=[^>]*>[^<>]*<\/a>/, `<div class="ray-link" onclick="window.openExternalLink('${item.link}')">${item.text}</div>`)
+        originalContent = originalContent.replace(/<a [^>]*href=[^>]*>[^<>]*<\/a>/, `<span class="ray-link" onclick="window.openExternalLink('${item.link}')">${item.text}</span>`)
       })
     }
     this.content = stylePreset + originalContent
