@@ -124,6 +124,7 @@ html, body {
   padding: 0 2px;
   border-radius: 6px;
   border: 1px dashed #ccc;
+  color: #3366aa;
   cursor: pointer;
   transition: all 0.4s;
   &:hover {

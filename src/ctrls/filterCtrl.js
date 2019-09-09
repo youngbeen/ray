@@ -12,19 +12,18 @@ export default {
         return '> 1 day'
       } else {
         let result = dateUtil.getReadableTimeBySeconds(val)
-        if (result.hours) {
-          if (result.hours > 1) {
-            return `${result.hours} hours ago`
-          } else {
-            return `${result.hours} hour ago`
-          }
-        } else {
-          if (result.minutes > 1) {
-            return `${result.minutes} minutes ago`
-          } else {
-            return `${result.minutes} minute ago`
-          }
+        let str = ''
+        if (result.hours > 1) {
+          str += `${result.hours} hours `
+        } else if (result.hours) {
+          str += `${result.hours} hour `
         }
+        if (result.minutes > 1) {
+          str += `${result.minutes} minutes `
+        } else {
+          str += `${result.minutes} minute `
+        }
+        return `${str} ago`
       }
     } else {
       return ''

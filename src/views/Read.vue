@@ -37,7 +37,7 @@ export default {
     }
     let originalContent = JSON.parse(window.localStorage.getItem('rayPreviewContent'))
     const stylePreset = '<style>img{max-width:1000px;max-height:800px;}</style>'
-    let rawLinks = originalContent.match(/<a [^>]*href=[^>]*>[^<>]*<\/a>/g)
+    let rawLinks = originalContent.match(/<a [^>]*href=[^>]*>(.(?!<a))+<\/a>/g)
     if (rawLinks) {
       // console.log('has link', rawLinks)
       let links = []
@@ -48,7 +48,7 @@ export default {
         })
       })
       links.forEach((item) => {
-        originalContent = originalContent.replace(/<a [^>]*href=[^>]*>[^<>]*<\/a>/, `<span class="ray-link" onclick="window.openExternalLink('${item.link}')">${item.text}</span>`)
+        originalContent = originalContent.replace(/<a [^>]*href=[^>]*>(.(?!<a))+<\/a>/, `<span class="ray-link" onclick="window.openExternalLink('${item.link}')">${item.text}</span>`)
       })
     }
     this.content = stylePreset + originalContent
