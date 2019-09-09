@@ -101,6 +101,7 @@ export default {
     }
     system.chapters.push({
       rssId: feed.id,
+      updateTime: new Date(),
       list
     })
   },

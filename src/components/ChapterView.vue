@@ -3,12 +3,17 @@
     <div id="chapterview-lighthouse"></div>
 
     <div class="bed-chapter">
+      <div class="no-data" v-show="currentFeedUpdateTime">Last updated: {{ currentFeedUpdateTime | readableTime }}</div>
+
       <div class="chapter-item" v-for="chapter in displayChapters" :key="chapter.id">
         <div class="box-chapter" @click="view(chapter)">
           <div class="content" :class="[chapter.avatar ? 'padded' : '']">
             <div class="title">{{ chapter.title }}</div>
             <div class="desc">{{ chapter.plainDescription }}</div>
-            <div class="author-tip">{{ chapter.pubDateText }}</div>
+            <div class="author-tip">
+              Length: {{ chapter.plainDescription.length }}
+              <div class="date">{{ chapter.pubDateText }}</div>
+            </div>
             <!-- <p v-html="chapter.description"></p> -->
           </div>
           <div class="box-avatar" v-if="chapter.avatar" :style="{ backgroundImage: `url(${chapter.avatar})` }" @click.stop="preview(chapter)">
@@ -31,13 +36,16 @@ import { shell } from 'electron'
 import eventBus from '@/eventBus'
 import system from '@/models/system'
 import config from '@/models/config'
+import filterCtrl from '@/ctrls/filterCtrl'
 
 export default {
   name: 'chapterView',
   data () {
     return {
+      nowTime: new Date(), // 当前时间，用于动态显示时间差
       savedY: 0, // 保存的滑动top y值
       pageSize: 20,
+      tc: null,
       system
     }
   },
@@ -61,7 +69,27 @@ export default {
       } else {
         return []
       }
+    },
+    currentFeedUpdateTime () {
+      if (this.system.chapters.length && this.system.rssSources.filter(f => f.active).length && this.system.activeRssIndex > -1) {
+        let currentChannel = this.system.chapters.find(item => item.rssId === this.system.rssSources[this.system.activeRssIndex].id)
+        if (currentChannel) {
+          let time = currentChannel.updateTime || ''
+          if (time) {
+            return Math.round((this.nowTime.getTime() - (new Date(time)).getTime()) / 1000)
+          } else {
+            return ''
+          }
+        } else {
+          return ''
+        }
+      } else {
+        return ''
+      }
     }
+  },
+  filters: {
+    readableTime: filterCtrl.readableTime
   },
 
   mounted () {
@@ -70,6 +98,11 @@ export default {
     if (oldY) {
       document.querySelector('.bed-chapter-view').scrollTo(0, oldY)
     }
+
+    // auto update time
+    this.tc = setInterval(() => {
+      this.nowTime = new Date()
+    }, 1000 * 60)
 
     eventBus.$on('scrollToTop', params => {
       if (params.target === 'chapterView') {
@@ -99,6 +132,7 @@ export default {
   },
 
   beforeDestroy () {
+    clearInterval(this.tc)
     eventBus.$off('scrollToTop')
     if (document.querySelector('.bed-chapter-view')) {
       document.querySelector('.bed-chapter-view').onscroll = null
@@ -224,9 +258,15 @@ export default {
             -webkit-box-orient: vertical;
           }
           .author-tip {
+            position: relative;
             color: #aaa;
-            text-align: right;
+            // text-align: right;
             font-size: 11px;
+            .date {
+              position: absolute;
+              right: 0;
+              top: 0;
+            }
           }
         }
       }
@@ -240,8 +280,9 @@ export default {
         bottom: 0;
         width: 40px;
         background: #b2cbe6;
-        opacity: 0;
+        box-shadow: 0 0 4px 0 rgba(122, 122, 122, .2);
         cursor: pointer;
+        opacity: 0;
         transition: all 0.4s;
         z-index: 1;
         img {

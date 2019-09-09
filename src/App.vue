@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron'
+import { ipcRenderer, shell } from 'electron'
 import system from '@/models/system'
 import config from '@/models/config'
 import systemCtrl from '@/ctrls/systemCtrl'
@@ -49,6 +49,10 @@ export default {
       // console.log(content, type)
       this.importData(content)
     })
+
+    window.openExternalLink = (link) => {
+      shell.openExternal(link)
+    }
   },
 
   methods: {
@@ -114,5 +118,17 @@ html, body {
 .container {
   height: calc(100% - 22px);
   padding-top: 22px;
+}
+// common styles
+.ray-link {
+  display: inline;
+  padding: 0 4px;
+  border-radius: 6px;
+  border: 1px dashed #ccc;
+  cursor: pointer;
+  transition: all 0.4s;
+  &:hover {
+    background: #b2cbe6;
+  }
 }
 </style>

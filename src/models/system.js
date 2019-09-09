@@ -21,6 +21,7 @@ export default {
   chapters: [
     // {
     //   rssId: '',
+    //   updateTime: '',
     //   list: [
     //     {
     //       id: '', // 前端生成，生成规则 = md5(title + '=!=' + link)

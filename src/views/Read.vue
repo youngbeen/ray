@@ -35,7 +35,23 @@ export default {
     if (query.url) {
       this.url = decodeURIComponent(query.url)
     }
-    this.content = '<style>img{max-width:1000px;max-height:800px;}</style>' + JSON.parse(window.localStorage.getItem('rayPreviewContent'))
+    let originalContent = JSON.parse(window.localStorage.getItem('rayPreviewContent'))
+    const stylePreset = '<style>img{max-width:1000px;max-height:800px;}</style>'
+    let rawLinks = originalContent.match(/<a [^>]*href=[^>]*>[^<>]*<\/a>/g)
+    if (rawLinks) {
+      // console.log('has link', rawLinks)
+      let links = []
+      rawLinks.forEach(link => {
+        links.push({
+          text: link.match(/(?<=>).*(?=<\/a>)/),
+          link: link.match(/(?<=href=("|'))[^<>"']+(?=("|'))/)[0]
+        })
+      })
+      links.forEach((item) => {
+        originalContent = originalContent.replace(/<a [^>]*href=[^>]*>[^<>]*<\/a>/, `<div class="ray-link" onclick="window.openExternalLink('${item.link}')">${item.text}</div>`)
+      })
+    }
+    this.content = stylePreset + originalContent
   },
 
   methods: {
@@ -46,6 +62,9 @@ export default {
     },
     back () {
       this.$router.go(-1)
+    },
+    test () {
+      console.log('test')
     }
   }
 }
