@@ -205,7 +205,7 @@ export default {
       top: 8px;
       width: 18px;
       opacity: 0;
-      transition: all 0.2s;
+      transition: all 0.1s;
     }
     .arrow {
       position: absolute;

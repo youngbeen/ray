@@ -52,28 +52,47 @@ export default {
   name: 'home',
   data () {
     return {
+      lastestList: [],
+      tc: null,
       system
     }
   },
   computed: {
-    lastestList () {
-      if (this.system.chapters.length) {
-        let plainList = JSON.parse(JSON.stringify(this.system.chapters.reduce((soFar, cat) => {
-          return [...soFar, ...cat.list]
-        }, [])))
-        plainList.sort((a, b) => b.pubDate - a.pubDate)
-        return plainList.slice(0, 10)
-      } else {
-        return []
-      }
-    },
     activeFeeds () {
       let list = this.system.rssSources.filter(item => item.active)
       return list.slice(0, 10)
     }
   },
+  watch: {
+    'system.chapters': function (val) {
+      clearTimeout(this.tc)
+      this.tc = setTimeout(() => {
+        console.log('筛选最新文章...')
+        this.getLatestChapters(val)
+      }, 1000 * 2)
+    }
+  },
+
+  mounted () {
+    // 处理最新文章
+    if (system.chapters.length) {
+      this.getLatestChapters()
+    }
+  },
 
   methods: {
+    getLatestChapters (val) {
+      val = val || system.chapters
+      if (val.length) {
+        let plainList = JSON.parse(JSON.stringify(val.reduce((soFar, cat) => {
+          return [...soFar, ...cat.list]
+        }, [])))
+        plainList.sort((a, b) => b.pubDate - a.pubDate)
+        this.lastestList = plainList.slice(0, 10)
+      } else {
+        this.lastestList = []
+      }
+    },
     view (chapter) {
       let url = chapter.link || ''
       let content = chapter.description || ''
