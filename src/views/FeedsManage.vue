@@ -26,23 +26,25 @@
         </div>
       </div>
 
-      <div class="row" v-for="feed in currentList" :key="feed.id">
-        <div class="box-name">
-          <img :src="feed.icon" alt="">
-          <div class="name">{{ feed.title }}</div>
-        </div>
-        <div class="box-source">
-          <div class="source">{{ feed.source }}</div>
-        </div>
-        <div class="desc">{{ feed.description }}</div>
-        <div class="box-actions">
-          <div class="btn btn-warn" v-if="feed.active" @click="activate(feed, false)">Unfollow</div>
-          <div class="btn" v-else @click="activate(feed, true)">Follow</div>
-          <!-- <div class="btn" @click="handleEdit()">
-            <img src="../assets/edit.png" alt="Edit">
-          </div> -->
-          <div class="btn" @click="handleDelete(feed)">
-            <img src="../assets/bin.png" alt="Delete">
+      <div class="rows">
+        <div class="row" v-for="feed in currentList" :key="feed.id">
+          <div class="box-name">
+            <img :src="feed.icon" alt="">
+            <div class="name">{{ feed.title }}</div>
+          </div>
+          <div class="box-source">
+            <div class="source">{{ feed.source }}</div>
+          </div>
+          <div class="desc">{{ feed.description }}</div>
+          <div class="box-actions">
+            <div class="btn btn-warn" v-if="feed.active" @click="activate(feed, false)">Unfollow</div>
+            <div class="btn" v-else @click="activate(feed, true)">Follow</div>
+            <!-- <div class="btn" @click="handleEdit()">
+              <img src="../assets/edit.png" alt="Edit">
+            </div> -->
+            <div class="btn" @click="handleDelete(feed)">
+              <img src="../assets/bin.png" alt="Delete">
+            </div>
           </div>
         </div>
       </div>
@@ -279,7 +281,7 @@ export default {
       align-items: center;
       height: 40px;
       border-bottom: 1px solid #eee;
-      // box-shadow: 0px 10px 8px 0px rgba(122, 122, 122, .1);
+      // box-shadow: 0px 8px 4px 0px rgba(122, 122, 122, .1);
       .btn {
         margin-right: 6px;
         // height: 100%;
@@ -301,77 +303,81 @@ export default {
         }
       }
     }
-    .row {
-      display: flex;
-      justify-content: space-between;
-      height: 40px;
-      // background: red;
-      border-bottom: 1px solid #eee;
-      font-size: 13px;
-      .box-name {
+    .rows {
+      max-height: 554px;
+      overflow-y: auto;
+      .row {
         display: flex;
-        align-items: center;
-        width: 20%;
-        img {
-          margin-right: 6px;
-          max-width: 14px;
-          max-height: 14px;
+        justify-content: space-between;
+        height: 40px;
+        // background: red;
+        border-bottom: 1px solid #eee;
+        font-size: 13px;
+        .box-name {
+          display: flex;
+          align-items: center;
+          width: 20%;
+          img {
+            margin-right: 6px;
+            max-width: 14px;
+            max-height: 14px;
+          }
+          .name {
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
         }
-        .name {
-          font-weight: 500;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
+        .box-source {
+          width: 30%;
+          .source {
+            line-height: 40px;
+            color: #666;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
         }
-      }
-      .box-source {
-        width: 30%;
-        .source {
+        .desc {
+          width: 30%;
           line-height: 40px;
           color: #666;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
         }
-      }
-      .desc {
-        width: 30%;
-        line-height: 40px;
-        color: #666;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-      .box-actions {
-        display: flex;
-        align-items: center;
-        width: 16%;
-        .btn {
+        .box-actions {
           display: flex;
           align-items: center;
-          margin-right: 6px;
-          height: 24px;
-          padding: 0 8px;
-          // border: 1px solid #ccc;
-          border-radius: 20px;
-          color: #333;
-          background: #ddd;
-          font-size: 12px;
-          font-weight: 500;
-          opacity: 0.6;
-          transition: all 0.4s;
-          cursor: pointer;
-          user-select: none;
-          &.btn-warn {
-            color: #fff;
-            background: #d8473d;
-          }
-          &:hover {
-            opacity: 1;
-          }
-          img {
-            max-width: 12px;
-            max-height: 12px;
+          width: 16%;
+          .btn {
+            display: flex;
+            align-items: center;
+            margin-right: 6px;
+            height: 24px;
+            padding: 0 8px;
+            // border: 1px solid #ccc;
+            border-radius: 20px;
+            color: #333;
+            background: #ddd;
+            font-size: 12px;
+            font-weight: 500;
+            opacity: 0.6;
+            transition: all 0.4s;
+            cursor: pointer;
+            user-select: none;
+            &.btn-warn {
+              color: #fff;
+              background: #d8473d;
+            }
+            &:hover {
+              opacity: 1;
+            }
+            img {
+              max-width: 12px;
+              max-height: 12px;
+            }
           }
         }
       }

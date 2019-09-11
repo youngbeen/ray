@@ -64,12 +64,15 @@ export default {
     }
   },
   watch: {
-    'system.chapters': function (val) {
-      clearTimeout(this.tc)
-      this.tc = setTimeout(() => {
-        console.log('筛选最新文章...')
-        this.getLatestChapters(val)
-      }, 1000 * 2)
+    'system.chapters': {
+      handler: function (val) {
+        clearTimeout(this.tc)
+        this.tc = setTimeout(() => {
+          console.log('筛选最新文章...')
+          this.getLatestChapters(val)
+        }, 1000 * 2)
+      },
+      deep: true
     }
   },
 
