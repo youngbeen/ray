@@ -39,7 +39,7 @@ export default {
       let title = 'Ray'
       if (this.chapterInfo.title) {
         title = `${this.chapterInfo.author} - ${this.chapterInfo.title}`
-        document.querySelector('#title-marquee').innerHTML = `<marquee direction="left" behavior="alternate" scrollamount="1" onmouseover="this.stop()" onmouseout="this.start()">${title}</marquee>`
+        document.querySelector('#title-marquee').innerHTML = `<marquee direction="left" behavior="alternate" scrollamount="1" onmouseover="this.stop()" onmouseout="this.start()" style="padding: 0 4px;">${title}</marquee>`
       } else {
         document.querySelector('#title-marquee').innerHTML = `<div>Ray</div>`
       }
