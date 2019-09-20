@@ -32,6 +32,9 @@ export default {
     // 读取本地存储的RSS订阅源
     system.rssSources = systemCtrl.readRssSubscribes()
     this.getAllFeeds()
+    // 读取本地存储的书签文章
+    let savedBookmarks = systemCtrl.readBookmarks()
+    system.bookmarks = savedBookmarks
 
     // 自动更新文章
     setInterval(() => {
@@ -120,6 +123,9 @@ html, body {
   padding-top: 22px;
 }
 // common styles
+.bold {
+  font-weight: bold;
+}
 .ray-link {
   padding: 0 2px;
   border-radius: 6px;

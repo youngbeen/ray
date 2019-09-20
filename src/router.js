@@ -4,6 +4,7 @@ import Home from './views/Home.vue'
 import Feeds from './views/Feeds.vue'
 import Read from './views/Read.vue'
 import FeedsManage from './views/FeedsManage.vue'
+import BookmarkChapters from './views/BookmarkChapters.vue'
 
 Vue.use(Router)
 
@@ -32,6 +33,11 @@ export default new Router({
       path: '/feedsManage',
       name: 'feedsManage',
       component: FeedsManage
+    },
+    {
+      path: '/bookmarks',
+      name: 'bookmarks',
+      component: BookmarkChapters
     },
     {
       path: '/config',

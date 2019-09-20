@@ -74,21 +74,18 @@ export default {
       })
     },
     view (chapter) {
-      let url = chapter.link || ''
+      // let url = chapter.link || ''
       let content = chapter.description || ''
       if (content) {
         // 使用app内浏览访问
-        window.localStorage.setItem('rayPreviewContent', JSON.stringify(content))
+        window.sessionStorage.setItem('previewChapter', JSON.stringify(Object.assign({}, chapter, { rss: system.rssSources[system.activeRssIndex] })))
         system.readingChapter = {
           icon: chapter.icon,
           author: chapter.author,
           title: chapter.title
         }
         this.$router.push({
-          name: 'read',
-          query: {
-            url: encodeURIComponent(url)
-          }
+          name: 'read'
         })
       } else if (chapter.avatar) {
         // 有预览图

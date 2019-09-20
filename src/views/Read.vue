@@ -5,63 +5,103 @@
       <div v-html="content"></div>
     </div>
 
-    <div class="btn-back" @click="back()">
-      <img src="../assets/arrow_left.png" alt="<">
-      back
-    </div>
-
-    <div class="btn-browse" v-if="url" @click="view()">
-      <img src="../assets/view.png" alt="">
-      View Original
+    <div class="box-btns">
+      <div class="btn" @click="back()">
+        <img class="h-img" src="../assets/arrow_left.png" alt="<">
+        <span class="text">back</span>
+      </div>
+      <div class="btn" v-if="chapter.link" @click="view()">
+        <img class="h-img" src="../assets/view.png" alt="">
+      </div>
+      <div class="btn" v-show="!hasBookmarked" @click="bookmark()">
+        <img class="n-img" src="../assets/star.png" alt="">
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { shell } from 'electron'
+import system from '@/models/system'
+import systemCtrl from '@/ctrls/systemCtrl'
 
 export default {
   name: 'pageView',
   data () {
     return {
-      url: '',
-      content: ''
+      chapter: {
+        id: '', // 前端生成，生成规则 = md5(title + '=!=' + link)
+        title: '',
+        link: '',
+        pubDate: '',
+        plainDescription: '', // 前端处理后的纯文本描述，最多100个字符
+        avatar: '', // 前端处理得到的首个图片
+        description: '', // html原始预览内容
+        author: '',
+        icon: '',
+        rss: {
+          id: '', // 前端生成，首次添加生成，生成规则 = md5(title + '==' + link)
+          title: '',
+          source: '',
+          link: '',
+          description: '',
+          icon: ''
+        }
+      },
+      content: '', // 处理后的正文
+      system
+    }
+  },
+  computed: {
+    hasBookmarked () {
+      return this.system.bookmarks.some(item => item.id === this.chapter.id)
     }
   },
 
   mounted () {
-    const query = this.$route.query
-
-    if (query.url) {
-      this.url = decodeURIComponent(query.url)
-    }
-    let originalContent = JSON.parse(window.localStorage.getItem('rayPreviewContent'))
-    const stylePreset = '<style>img{max-width:1000px;max-height:800px;}</style>'
-    let rawLinks = originalContent.match(/<a [^>]*href=[^>]*>(.(?!<a))+<\/a>/g)
-    if (rawLinks) {
-      // console.log('has link', rawLinks)
-      let links = []
-      rawLinks.forEach(link => {
-        links.push({
-          text: link.match(/(?<=>).*(?=<\/a>)/),
-          link: link.match(/(?<=href=("|'))[^<>"']+(?=("|'))/)[0]
-        })
-      })
-      links.forEach((item) => {
-        originalContent = originalContent.replace(/<a [^>]*href=[^>]*>(.(?!<a))+<\/a>/, `<span class="ray-link" onclick="window.openExternalLink('${item.link}')">${item.text}</span>`)
-      })
-    }
-    this.content = stylePreset + originalContent
+    let chapter = JSON.parse(window.sessionStorage.getItem('previewChapter'))
+    this.chapter = chapter
+    this.fixContent()
   },
 
   methods: {
+    fixContent () {
+      let originalContent = this.chapter.description || ''
+      const stylePreset = '<style>img{max-width:1000px;max-height:800px;}</style>'
+      let rawLinks = originalContent.match(/<a [^>]*href=[^>]*>(.(?!<a))+<\/a>/g)
+      if (rawLinks) {
+        // console.log('has link', rawLinks)
+        let links = []
+        rawLinks.forEach(link => {
+          links.push({
+            text: link.match(/(?<=>).*(?=<\/a>)/),
+            link: link.match(/(?<=href=("|'))[^<>"']+(?=("|'))/)[0]
+          })
+        })
+        links.forEach((item) => {
+          originalContent = originalContent.replace(/<a [^>]*href=[^>]*>(.(?!<a))+<\/a>/, `<span class="ray-link" onclick="window.openExternalLink('${item.link}')">${item.text}</span>`)
+        })
+      }
+      this.content = stylePreset + originalContent
+    },
     view () {
-      if (this.url) {
-        shell.openExternal(this.url)
+      if (this.chapter.link) {
+        shell.openExternal(this.chapter.link)
       }
     },
     back () {
       this.$router.go(-1)
+    },
+    bookmark () {
+      if (!this.chapter.id) {
+        return
+      }
+      systemCtrl.addBookmark(this.chapter)
+      systemCtrl.saveBookmarks()
+      let notify = new Notification('Chapter bookmarked!', {
+        body: `You can find this chapter in bookmarks`
+      })
+      notify.onclick = () => {}
     },
     test () {
       console.log('test')
@@ -86,51 +126,43 @@ export default {
       padding: 30px;
     }
   }
-  .btn-back {
+  .box-btns {
     display: flex;
     align-items: center;
     position: fixed;
     left: 0px;
     top: 22px;
-    // width: 30px;
-    height: 30px;
-    line-height: 30px;
-    padding: 0 6px;
     border-bottom-right-radius: 8px;
-    background: rgba(238, 238, 238, .5);
-    transition: all 0.4s;
-    cursor: pointer;
-    user-select: none;
-    &:hover {
-      background: rgba(238, 238, 238, .8);
-    }
-    img {
-      margin-right: 6px;
-      height: 12px;
-    }
-  }
-  .btn-browse {
-    display: flex;
-    align-items: center;
-    position: fixed;
-    left: 80px;
-    top: 22px;
-    // width: 30px;
-    height: 30px;
-    line-height: 30px;
-    padding: 0 6px;
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
-    background: rgba(238, 238, 238, .5);
-    transition: all 0.4s;
-    cursor: pointer;
-    user-select: none;
-    &:hover {
-      background: rgba(238, 238, 238, .8);
-    }
-    img {
-      margin-right: 6px;
-      width: 16px;
+    overflow: hidden;
+    .btn {
+      display: flex;
+      align-items: center;
+      margin-right: 1px;
+      height: 30px;
+      line-height: 30px;
+      padding: 0 6px;
+      // border-right: 1px solid #aaa;
+      background: rgba(238, 238, 238, .5);
+      transition: all 0.4s;
+      cursor: pointer;
+      user-select: none;
+      &:hover {
+        background: rgba(238, 238, 238, .8);
+      }
+      .h-img {
+        // margin-right: 6px;
+        height: 12px;
+      }
+      .w-img {
+        width: 12px;
+      }
+      .n-img {
+        max-width: 16px;
+        max-height: 16px;
+      }
+      .text {
+        margin-left: 6px;
+      }
     }
   }
 }

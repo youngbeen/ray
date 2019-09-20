@@ -34,6 +34,10 @@
           <img src="../assets/plus.png" alt="+">
           <div class="text">Add New Rss Feed</div>
         </div>
+        <div class="row" @click="goBookmarks()">
+          <img src="../assets/star.png" alt="">
+          <div class="text bold-text">Bookmarked Chapters</div>
+        </div>
         <div class="row" @click="goConfig()">
           <img src="../assets/gear.png" alt="">
           <div class="text">System Config</div>
@@ -97,21 +101,18 @@ export default {
       }
     },
     view (chapter) {
-      let url = chapter.link || ''
+      // let url = chapter.link || ''
       let content = chapter.description || ''
       if (content) {
         // 使用app内浏览访问
-        window.localStorage.setItem('rayPreviewContent', JSON.stringify(content))
+        window.sessionStorage.setItem('previewChapter', JSON.stringify(Object.assign({}, chapter, { rss: system.rssSources[system.activeRssIndex] })))
         system.readingChapter = {
           icon: chapter.icon,
           author: chapter.author,
           title: chapter.title
         }
         this.$router.push({
-          name: 'read',
-          query: {
-            url: encodeURIComponent(url)
-          }
+          name: 'read'
         })
       } else if (chapter.avatar) {
         // 有预览图
@@ -137,6 +138,11 @@ export default {
     addFeed () {
       this.$router.push({
         name: 'feedsManage'
+      })
+    },
+    goBookmarks () {
+      this.$router.push({
+        name: 'bookmarks'
       })
     },
     goConfig () {
@@ -215,6 +221,9 @@ export default {
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
+          &.bold-text {
+            font-weight: bold;
+          }
         }
         &:hover {
           background: #eee;

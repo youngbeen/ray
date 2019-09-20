@@ -144,6 +144,32 @@ export default {
     //   }
     // ]
   },
+  addBookmark (chapter) {
+    if (!chapter || system.bookmarks.some(item => item.id === chapter.id)) {
+      return
+    }
+    system.bookmarks.unshift(chapter)
+  },
+  removeBookmark (chapter) {
+    if (!chapter || !chapter.id) {
+      return
+    }
+    let targetIndex = system.bookmarks.findIndex(item => item.id === chapter.id)
+    if (targetIndex > -1) {
+      system.bookmarks.splice(targetIndex, 1)
+    }
+  },
+  saveBookmarks () {
+    window.localStorage.setItem('raySavedBookmarks', JSON.stringify(system.bookmarks))
+  },
+  readBookmarks () {
+    let data = window.localStorage.getItem('raySavedBookmarks') || ''
+    if (data) {
+      return JSON.parse(data)
+    } else {
+      return []
+    }
+  },
   saveConfig () {
     window.localStorage.setItem('raySavedConfig', JSON.stringify(config))
   },
