@@ -3,7 +3,9 @@
     <title-bar></title-bar>
 
     <div class="container">
-      <router-view/>
+      <transition :name="transitionType">
+        <router-view/>
+      </transition>
     </div>
 
     <image-preview></image-preview>
@@ -23,6 +25,22 @@ import Loading from '@/components/Loading.vue'
 
 export default {
   name: 'app',
+  data () {
+    return {
+      transitionType: ''
+    }
+  },
+  watch: {
+    $route (to, from) {
+      if (to.meta.index > from.meta.index) {
+        // 前进状态,反之则为后退状态
+        this.transitionType = 'slide-left'
+      } else {
+        // 后退状态
+        this.transitionType = 'slide-right'
+      }
+    }
+  },
 
   mounted () {
     // 读取本地存储的配置信息
@@ -121,6 +139,32 @@ html, body {
 .container {
   height: calc(100% - 22px);
   padding-top: 22px;
+}
+// 定义动画类
+.slide-right-enter-active,
+.slide-right-leave-active,
+.slide-left-enter-active,
+.slide-left-leave-active {
+  position: absolute;
+  will-change: transform;
+  // transition: all 0.5s;
+  transition: all 0.6s ease-out;
+}
+.slide-right-enter {
+  opacity: 0;
+  transform: translate3d(-100%, 0, 0) scale(0.7);
+}
+.slide-right-leave-active {
+  opacity: 0;
+  transform: translate3d(100%, 0, 0) scale(0.7);
+}
+.slide-left-enter {
+  opacity: 0;
+  transform: translate3d(100%, 0, 0) scale(0.7);
+}
+.slide-left-leave-active {
+  opacity: 0;
+  transform: translate3d(-100%, 0, 0) scale(0.7);
 }
 // common styles
 .bold {
