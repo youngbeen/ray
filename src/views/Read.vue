@@ -13,6 +13,9 @@
       <div class="btn" v-if="chapter.link" @click="view()">
         <img class="h-img" src="../assets/view.png" alt="">
       </div>
+      <div class="btn" v-if="chapter.link" @click="share()">
+        <img class="n-img" src="../assets/link.png" alt="">
+      </div>
       <div class="btn" v-show="!hasBookmarked" @click="bookmark()">
         <img class="n-img" src="../assets/star.png" alt="">
       </div>
@@ -21,7 +24,7 @@
 </template>
 
 <script>
-import { shell } from 'electron'
+import { shell, clipboard } from 'electron'
 import system from '@/models/system'
 import systemCtrl from '@/ctrls/systemCtrl'
 
@@ -91,6 +94,15 @@ export default {
     },
     back () {
       this.$router.go(-1)
+    },
+    share () {
+      if (this.chapter.link) {
+        clipboard.writeText(this.chapter.link)
+        let notify = new Notification('Chapter Link Copied!', {
+          body: `You can paste link and share now`
+        })
+        notify.onclick = () => {}
+      }
     },
     bookmark () {
       if (!this.chapter.id) {

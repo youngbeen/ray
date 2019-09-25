@@ -148,7 +148,7 @@ html, body {
   position: absolute;
   will-change: transform;
   // transition: all 0.5s;
-  transition: all 0.6s ease-out;
+  transition: all 0.5s ease-out;
 }
 .slide-right-enter {
   opacity: 0;
