@@ -287,7 +287,7 @@ export default {
         }
       }
       &:hover {
-        left: 2px;
+        // left: 2px;
         .box-chapter {
           color: #333;
           box-shadow: 3px 2px 10px 1px rgba(122, 122, 122, .3);
