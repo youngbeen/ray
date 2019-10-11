@@ -70,7 +70,7 @@ export default {
   methods: {
     fixContent () {
       let originalContent = this.chapter.description || ''
-      const stylePreset = '<style>img{max-width:1000px;max-height:800px;}</style>'
+      const stylePreset = '<style>img{display: block;margin: 0 auto;max-width: 600px;}</style>'
       let rawLinks = originalContent.match(/<a [^>]*href=[^>]*>(.(?!<a))+<\/a>/g)
       if (rawLinks) {
         // console.log('has link', rawLinks)
@@ -130,12 +130,18 @@ export default {
   .window {
     width: 100%;
     height: 100%;
+    background: #eee;
+    overflow-y: auto;
     iframe {
       width: 100%;
       height: 100%;
     }
     div {
-      padding: 30px;
+      margin: 30px auto 60px;
+      width: 700px;
+      padding: 10px 30px;
+      background: #fff;
+      letter-spacing: 1px;
     }
   }
   .box-btns {
@@ -154,12 +160,12 @@ export default {
       line-height: 30px;
       padding: 0 6px;
       // border-right: 1px solid #aaa;
-      background: rgba(238, 238, 238, .5);
+      background: #fff;
       transition: all 0.4s;
       cursor: pointer;
       user-select: none;
       &:hover {
-        background: rgba(238, 238, 238, .8);
+        background: rgba(255, 255, 255, .5);
       }
       .h-img {
         // margin-right: 6px;
