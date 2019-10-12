@@ -141,7 +141,7 @@ export default {
       width: 700px;
       padding: 10px 30px;
       background: #fff;
-      letter-spacing: 1px;
+      letter-spacing: 0.6px;
     }
   }
   .box-btns {
