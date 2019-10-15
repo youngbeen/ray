@@ -2,7 +2,8 @@
   <div class="page-view">
     <div class="window">
       <!-- <iframe v-if="url" :src="url" frameborder="0"></iframe> -->
-      <div v-html="content"></div>
+      <div class="chapter" v-html="content"></div>
+      <div class="chapter-end">- end -</div>
     </div>
 
     <div class="box-btns">
@@ -70,7 +71,7 @@ export default {
   methods: {
     fixContent () {
       let originalContent = this.chapter.description || ''
-      const stylePreset = '<style>img{display: block;margin: 0 auto;max-width: 600px;}</style>'
+      const stylePreset = '<style>img{display: block;margin: 0 auto;max-width: 600px;}video{max-width: 600px;}</style>'
       let rawLinks = originalContent.match(/<a [^>]*href=[^>]*>(.(?!<a))+<\/a>/g)
       if (rawLinks) {
         // console.log('has link', rawLinks)
@@ -132,16 +133,18 @@ export default {
     height: 100%;
     background: #eee;
     overflow-y: auto;
-    iframe {
-      width: 100%;
-      height: 100%;
-    }
-    div {
-      margin: 30px auto 60px;
+    .chapter {
+      margin: 30px auto 12px;
       width: 700px;
       padding: 10px 30px;
       background: #fff;
       letter-spacing: 0.6px;
+    }
+    .chapter-end {
+      margin-bottom: 48px;
+      color: #aaa;
+      text-align: center;
+      font-size: 12px;
     }
   }
   .box-btns {

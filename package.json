@@ -2,7 +2,7 @@
   "name": "ray",
   "description": "Enjoy pure RSS feeds reading with Ray",
   "author": "youngbeen",
-  "version": "0.6.5",
+  "version": "0.6.6",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
