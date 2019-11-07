@@ -3,7 +3,8 @@
     <title-bar></title-bar>
 
     <div class="container">
-      <transition :name="transitionType">
+      <!-- <transition :name="transitionType"> -->
+      <transition name="fade">
         <router-view/>
       </transition>
     </div>
@@ -165,6 +166,12 @@ html, body {
 .slide-left-leave-active {
   opacity: 0;
   transform: translate3d(-100%, 0, 0) scale(0.7);
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .4s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 // common styles
 .bold {

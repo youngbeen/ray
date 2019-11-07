@@ -50,6 +50,7 @@ export default {
   name: 'config',
   data () {
     return {
+      backLock: false,
       config
     }
   },
@@ -65,6 +66,10 @@ export default {
 
   methods: {
     back () {
+      if (this.backLock) {
+        return
+      }
+      this.backLock = true
       this.$router.go(-1)
     }
   }

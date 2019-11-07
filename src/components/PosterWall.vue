@@ -67,6 +67,10 @@ export default {
     }, 1000 * config.posterInterval)
   },
 
+  beforeDestroy () {
+    clearInterval(this.tc)
+  },
+
   methods: {
     addFeed () {
       this.$router.push({

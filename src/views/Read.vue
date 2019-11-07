@@ -33,6 +33,7 @@ export default {
   name: 'pageView',
   data () {
     return {
+      backLock: false,
       chapter: {
         id: '', // 前端生成，生成规则 = md5(title + '=!=' + link)
         title: '',
@@ -94,6 +95,10 @@ export default {
       }
     },
     back () {
+      if (this.backLock) {
+        return
+      }
+      this.backLock = true
       this.$router.go(-1)
     },
     share () {

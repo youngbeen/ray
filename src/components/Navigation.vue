@@ -38,6 +38,7 @@ export default {
   name: 'navigation',
   data () {
     return {
+      backLock: false,
       isTitleFocus: false,
       system
     }
@@ -106,6 +107,10 @@ export default {
       systemCtrl.saveRssSubscribes()
     },
     back () {
+      if (this.backLock) {
+        return
+      }
+      this.backLock = true
       this.$router.go(-1)
     },
     handleMouseover () {

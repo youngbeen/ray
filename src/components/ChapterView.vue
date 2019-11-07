@@ -102,7 +102,7 @@ export default {
     // auto update time
     this.tc = setInterval(() => {
       this.nowTime = new Date()
-    }, 1000 * 60)
+    }, 1000 * 60 * 5)
 
     eventBus.$on('scrollToTop', params => {
       if (params.target === 'chapterView') {

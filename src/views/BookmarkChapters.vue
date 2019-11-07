@@ -52,6 +52,7 @@ export default {
   name: 'pageBookmarks',
   data () {
     return {
+      backLock: false,
       savedY: 0, // 保存的滑动top y值
       pageSize: 20,
       system
@@ -155,6 +156,10 @@ export default {
       }
     },
     back () {
+      if (this.backLock) {
+        return
+      }
+      this.backLock = true
       this.$router.go(-1)
     }
   }

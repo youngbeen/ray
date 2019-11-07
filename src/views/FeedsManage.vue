@@ -65,6 +65,7 @@ export default {
   data () {
     return {
       loading: false,
+      backLock: false,
       selectedActiveType: true,
       inputUrl: '',
       system
@@ -211,6 +212,10 @@ export default {
       }
     },
     back () {
+      if (this.backLock) {
+        return
+      }
+      this.backLock = true
       this.$router.go(-1)
     }
   }
