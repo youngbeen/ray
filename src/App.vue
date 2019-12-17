@@ -117,6 +117,15 @@ export default {
 </script>
 
 <style lang="scss">
+@font-face {
+  font-family: 'AlexBrush Regular';
+  src: url('./assets/fonts/alex-brush/AlexBrush-Regular.ttf');
+}
+@font-face {
+  font-family: 'RobotoSlab Regular';
+  src: url('./assets/fonts/roboto-slab/RobotoSlab-Regular.ttf');
+}
+
 html, body {
   margin: 0;
   width: 100%;

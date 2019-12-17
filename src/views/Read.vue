@@ -3,7 +3,12 @@
     <div class="window">
       <!-- <iframe v-if="url" :src="url" frameborder="0"></iframe> -->
       <div class="chapter" v-html="content"></div>
-      <div class="chapter-end">- end -</div>
+      <div class="chapter-end">- The end -</div>
+      <div class="bottom-btns">
+        <div class="btn" @click="back()">
+          &lt; back
+        </div>
+      </div>
     </div>
 
     <div class="box-btns">
@@ -26,6 +31,7 @@
 
 <script>
 import { shell, clipboard } from 'electron'
+// import { getStyleIndex, getStyle } from '@/api/system'
 import system from '@/models/system'
 import systemCtrl from '@/ctrls/systemCtrl'
 
@@ -67,6 +73,8 @@ export default {
     let chapter = JSON.parse(window.sessionStorage.getItem('previewChapter'))
     this.chapter = chapter
     this.fixContent()
+    // 加载预设样式
+    // this.getPreset(this.chapter.rss.source)
   },
 
   methods: {
@@ -87,8 +95,19 @@ export default {
           originalContent = originalContent.replace(/<a [^>]*href=[^>]*>(.(?!<a))+<\/a>/, `<span class="ray-link" onclick="window.openExternalLink('${item.link}')">${item.text}</span>`)
         })
       }
+      // console.log(originalContent)
       this.content = stylePreset + originalContent
     },
+    // mergeStyle (rules) {
+    //   rules.forEach(rule => {
+    //     switch (rule.type) {
+    //       case 'replace':
+    //         console.log(rule.target)
+    //         // this.content.replace(rule.target, rule.with)
+    //         this.content.replace(rule.target, 'TODO')
+    //     }
+    //   })
+    // },
     view () {
       if (this.chapter.link) {
         shell.openExternal(this.chapter.link)
@@ -120,10 +139,25 @@ export default {
         body: `You can find this chapter in bookmarks`
       })
       notify.onclick = () => {}
-    },
-    test () {
-      console.log('test')
     }
+    // getPreset (source) {
+    //   getStyleIndex().then(data => {
+    //     if (data) {
+    //       let indexMap = data
+    //       let target = indexMap.find(item => item.url === source || item.url === `${source}/`)
+    //       if (target && target.id) {
+    //         // 存在预设样式，获取并覆盖当前默认样式
+    //         return getStyle(target.id)
+    //       }
+    //     }
+    //   }).then(rules => {
+    //     if (rules && rules.length) {
+    //       this.mergeStyle(rules)
+    //     }
+    //   }).catch(err => {
+    //     console.warn(err)
+    //   })
+    // }
   }
 }
 </script>
@@ -144,12 +178,32 @@ export default {
       padding: 10px 30px;
       background: #fff;
       letter-spacing: 0.6px;
+      font-family: 'RobotoSlab Regular';
     }
     .chapter-end {
-      margin-bottom: 48px;
+      margin-bottom: 24px;
       color: #aaa;
       text-align: center;
-      font-size: 12px;
+      font-size: 20px;
+      font-family: 'AlexBrush Regular';
+    }
+    .bottom-btns {
+      margin-bottom: 36px;
+      text-align: center;
+      .btn {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 18px;
+        color: #666;
+        background: #fff;
+        cursor: pointer;
+        opacity: 0.7;
+        user-select: none;
+        transition: all 0.4s;
+        &:hover {
+          opacity: 1;
+        }
+      }
     }
   }
   .box-btns {
