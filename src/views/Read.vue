@@ -1,20 +1,15 @@
 <template>
   <div class="page-view">
-    <div class="window">
+    <div class="window" id="chapter-window">
       <!-- <iframe v-if="url" :src="url" frameborder="0"></iframe> -->
       <div class="chapter" v-html="content"></div>
       <div class="chapter-end">- The end -</div>
-      <div class="bottom-btns">
-        <div class="btn" @click="back()">
-          &lt; back
-        </div>
-      </div>
     </div>
 
     <div class="box-btns">
       <div class="btn" @click="back()">
         <img class="h-img" src="../assets/arrow_left.png" alt="<">
-        <span class="text">back</span>
+        <span class="text">Back</span>
       </div>
       <div class="btn" v-if="chapter.link" @click="view()">
         <img class="h-img" src="../assets/view.png" alt="">
@@ -24,6 +19,12 @@
       </div>
       <div class="btn" v-show="!hasBookmarked" @click="bookmark()">
         <img class="n-img" src="../assets/star.png" alt="">
+      </div>
+    </div>
+
+    <div class="fixed-btns" :class="[isFixedBtnShow && 'active']">
+      <div class="btn" @click="back()">
+        &lt; Back
       </div>
     </div>
   </div>
@@ -40,6 +41,7 @@ export default {
   data () {
     return {
       backLock: false,
+      isFixedBtnShow: false,
       chapter: {
         id: '', // 前端生成，生成规则 = md5(title + '=!=' + link)
         title: '',
@@ -60,6 +62,7 @@ export default {
         }
       },
       content: '', // 处理后的正文
+      savedY: 0, // 保存的滑动top y值
       system
     }
   },
@@ -75,6 +78,26 @@ export default {
     this.fixContent()
     // 加载预设样式
     // this.getPreset(this.chapter.rss.source)
+
+    document.querySelector('#chapter-window').onscroll = () => {
+      let scrollTop = document.querySelector('#chapter-window').scrollTop || document.querySelector('#chapter-window').pageYOffset
+      // let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight
+      // let clientHeight = document.documentElement.clientHeight || document.body.clientHeight
+      if (scrollTop > this.savedY) {
+        // 上滑中，不需要触发
+        this.isFixedBtnShow = true
+      } else {
+        // 下滑中，不需触发
+        this.isFixedBtnShow = false
+      }
+      this.savedY = scrollTop
+      // console.log(scrollTop)
+      // window.alert(`${scrollTop}, ${scrollHeight}, ${clientHeight}`)
+    }
+  },
+
+  beforeDestroy () {
+    document.querySelector('#chapter-window').onscroll = null
   },
 
   methods: {
@@ -82,6 +105,7 @@ export default {
       let originalContent = this.chapter.description || ''
       const stylePreset = '<style>img{display: block;margin: 0 auto;max-width: 600px;}video{max-width: 600px;}</style>'
       let rawLinks = originalContent.match(/<a [^>]*href=[^>]*>(.(?!<a))+<\/a>/g)
+      let rawImages = originalContent.match(/<im(g|age) [^>]*src=[^>]*>/g)
       if (rawLinks) {
         // console.log('has link', rawLinks)
         let links = []
@@ -93,6 +117,18 @@ export default {
         })
         links.forEach((item) => {
           originalContent = originalContent.replace(/<a [^>]*href=[^>]*>(.(?!<a))+<\/a>/, `<span class="ray-link" onclick="window.openExternalLink('${item.link}')">${item.text}</span>`)
+        })
+      }
+      // console.log(rawImages)
+      if (rawImages) {
+        let images = []
+        rawImages.forEach(image => {
+          images.push({
+            link: image.match(/(?<=src=("|'))[^<>"']+(?=("|'))/)[0]
+          })
+        })
+        images.forEach(item => {
+          originalContent = originalContent.replace(/<im(g|age) (?!class="ray-image")[^>]*src=[^>]*>/, `<img class="ray-image" src="${item.link}" onclick="window.previewImage('${item.link}')">`)
         })
       }
       // console.log(originalContent)
@@ -181,29 +217,11 @@ export default {
       font-family: 'RobotoSlab Regular';
     }
     .chapter-end {
-      margin-bottom: 24px;
+      margin-bottom: 12px;
       color: #aaa;
       text-align: center;
       font-size: 20px;
       font-family: 'AlexBrush Regular';
-    }
-    .bottom-btns {
-      margin-bottom: 36px;
-      text-align: center;
-      .btn {
-        display: inline-block;
-        padding: 6px 12px;
-        border-radius: 18px;
-        color: #666;
-        background: #fff;
-        cursor: pointer;
-        opacity: 0.7;
-        user-select: none;
-        transition: all 0.4s;
-        &:hover {
-          opacity: 1;
-        }
-      }
     }
   }
   .box-btns {
@@ -231,7 +249,7 @@ export default {
       }
       .h-img {
         // margin-right: 6px;
-        height: 12px;
+        height: 14px;
       }
       .w-img {
         width: 12px;
@@ -244,6 +262,50 @@ export default {
         margin-left: 6px;
       }
     }
+  }
+  .fixed-btns {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: -40px;
+    text-align: center;
+    transition: all 0.4s;
+    .btn {
+      display: inline-block;
+      width: 32px;
+      height: 32px;
+      line-height: 32px;
+      border-radius: 18px;
+      color: #666;
+      background: #fff;
+      text-align: center;
+      opacity: 0.8;
+      box-shadow: 0 0 8px 1px rgba(110, 110, 110, 0.3);
+      overflow: hidden;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.25s;
+      &:hover {
+        width: 70px;
+        opacity: 1;
+        box-shadow: 0 0 8px 1px rgba(110, 110, 110, 0.5);
+        animation: scaling 1s linear infinite;
+      }
+    }
+    &.active {
+      bottom: 24px;
+    }
+  }
+}
+@keyframes scaling {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-4px);
+  }
+  100% {
+    transform: translateX(0);
   }
 }
 </style>

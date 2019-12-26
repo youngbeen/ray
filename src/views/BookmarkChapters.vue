@@ -34,7 +34,7 @@
     <div class="box-btns">
       <div class="btn" @click="back()">
         <img class="h-img" src="../assets/arrow_left.png" alt="<">
-        <span class="text">back</span>
+        <span class="text">Back</span>
       </div>
     </div>
   </section>
@@ -184,7 +184,7 @@ export default {
       }
       .box-chapter {
         position: relative;
-        padding: 18px 24px;
+        padding: 16px 24px;
         // border-bottom: 1px solid #eee;
         // border-radius: 6px;
         background: #fff;
@@ -254,9 +254,10 @@ export default {
             .btn {
               padding: 4px;
               opacity: 0.5;
+              transition: all 0.25s;
               img {
-                max-width: 14px;
-                max-height: 14px;
+                max-width: 15px;
+                max-height: 15px;
               }
               &:hover {
                 opacity: 0.8;
@@ -305,7 +306,7 @@ export default {
       }
       .h-img {
         // margin-right: 6px;
-        height: 12px;
+        height: 14px;
       }
       .w-img {
         width: 12px;

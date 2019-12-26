@@ -58,8 +58,8 @@ export default {
   top: 0;
   right: 0;
   bottom: 0;
-  text-align: center;
   z-index: 100;
+  text-align: center;
   .bg {
     position: absolute;
     left: 0;
@@ -69,21 +69,19 @@ export default {
     background: rgba(255, 255, 255, .5);
   }
   .box-container {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
+    display: inline-block;
     position: relative;
-    margin-top: 50px;
+    margin-top: 50px auto;
+    max-height: 600px;
     padding: 20px;
     border-radius: 6px;
     background: #fff;
     box-shadow: 0 0 28px 1px rgba(122, 122, 122, .6);
-    overflow: hidden;
     opacity: 0;
+    overflow-y: auto;
     transition: all 0.4s;
     img {
       max-width: 1000px;
-      max-height: 500px;
     }
     &.animated {
       margin-top: 70px;

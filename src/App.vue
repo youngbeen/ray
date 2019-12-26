@@ -16,6 +16,7 @@
 
 <script>
 import { ipcRenderer, shell } from 'electron'
+import eventBus from '@/eventBus'
 import system from '@/models/system'
 import config from '@/models/config'
 import systemCtrl from '@/ctrls/systemCtrl'
@@ -74,6 +75,11 @@ export default {
 
     window.openExternalLink = (link) => {
       shell.openExternal(link)
+    }
+    window.previewImage = (link) => {
+      eventBus.$emit('preview', {
+        image: link
+      })
     }
   },
 

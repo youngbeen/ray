@@ -3,7 +3,7 @@
     <div class="box-btn">
       <div class="btn" @click="back()">
         <img class="arrow" src="../assets/arrow_left.png" alt="<">
-        back
+        Back
       </div>
     </div>
 
@@ -237,7 +237,7 @@ export default {
       user-select: none;
       .arrow {
         margin-right: 6px;
-        height: 10px;
+        height: 14px;
       }
       .icon {
         width: 16px;
