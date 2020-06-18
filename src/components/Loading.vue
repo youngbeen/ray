@@ -2,7 +2,7 @@
   <section class="window-loading" v-show="system.loading">
     <div class="bg"></div>
     <div class="box-container">
-      <div class="character">P</div>
+      <!-- <div class="character">P</div> -->
       <div class="line">&nbsp;</div>
     </div>
   </section>
@@ -12,7 +12,6 @@
 import system from '@/models/system'
 
 export default {
-  name: 'loading',
   data () {
     return {
       system
@@ -55,8 +54,20 @@ export default {
     }
     .line {
       position: absolute;
-      width: 0;
+      left: 0;
+      top: 24px;
+      width: 400px;
+      height: 8px;
+      background: #cccf23;
       animation: ray 2s ease-in infinite;
+      // left: 18px;
+      // top: 31px;
+      // height: 2px;
+      // border-left: 0px solid rgba(0,0,0,0);
+      // border-top: 0px solid rgba(0,0,0,0);
+      // border-right: 14px solid #cccf23;
+      // border-bottom: 0px solid rgba(0,0,0,0);
+      // transform: perspective(100px) rotateY(40deg);
       // left: 20px;
       // top: 28px;
       // height: 2px;
@@ -70,34 +81,37 @@ export default {
 }
 @keyframes ray {
     0% {
-      left: 18px;
-      top: 31px;
-      height: 2px;
-      border-left: 0px solid rgba(0,0,0,0);
-      border-top: 0px solid rgba(0,0,0,0);
-      border-right: 14px solid #cccf23;
-      border-bottom: 0px solid rgba(0,0,0,0);
-      transform: rotate(60deg);
+      transform: perspective(100px) rotateY(0deg);
+      // left: 18px;
+      // top: 31px;
+      // height: 2px;
+      // border-left: 0px solid rgba(0,0,0,0);
+      // border-top: 0px solid rgba(0,0,0,0);
+      // border-right: 14px solid #cccf23;
+      // border-bottom: 0px solid rgba(0,0,0,0);
+      // transform: rotate(60deg);
     }
-    40% {
-      left: 20px;
-      top: 28px;
-      height: 2px;
-      border-left: 0px solid rgba(0,0,0,0);
-      border-top: 0px solid rgba(0,0,0,0);
-      border-right: 14px solid #cccf23;
-      border-bottom: 0px solid rgba(0,0,0,0);
-      transform: rotate(1deg);
+    50% {
+      transform: perspective(100px) rotateY(90deg);
+      // left: 20px;
+      // top: 28px;
+      // height: 2px;
+      // border-left: 0px solid rgba(0,0,0,0);
+      // border-top: 0px solid rgba(0,0,0,0);
+      // border-right: 14px solid #cccf23;
+      // border-bottom: 0px solid rgba(0,0,0,0);
+      // transform: rotate(1deg);
     }
     100% {
-      left: 20px;
-      top: 28px;
-      height: 4px;
-      border-left: 0px solid rgba(0,0,0,0);
-      border-top: 1px solid rgba(0,0,0,0);
-      border-right: 400px solid #cccf23;
-      border-bottom: 30px solid rgba(0,0,0,0);
-      transform: rotate(1deg);
+      transform: perspective(100px) rotateY(180deg);
+      // left: 20px;
+      // top: 28px;
+      // height: 4px;
+      // border-left: 0px solid rgba(0,0,0,0);
+      // border-top: 1px solid rgba(0,0,0,0);
+      // border-right: 400px solid #cccf23;
+      // border-bottom: 30px solid rgba(0,0,0,0);
+      // transform: rotate(1deg);
     }
   }
 </style>

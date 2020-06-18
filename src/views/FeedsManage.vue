@@ -13,6 +13,11 @@
       <div class="btn" @click="handleAdd()">Add & Follow</div>
     </div>
 
+    <!-- 提示 -->
+    <div class="box-tip">
+      <div class="tip">If a feed continues to fail to load, try refreshing it</div>
+    </div>
+
     <!-- 列表 -->
     <div class="box-list">
       <div class="row-title">
@@ -42,6 +47,9 @@
             <!-- <div class="btn" @click="handleEdit()">
               <img src="../assets/edit.png" alt="Edit">
             </div> -->
+            <div class="btn" v-show="selectedActiveType" @click="handleRefresh(feed)">
+              <img src="../assets/reload.png" alt="Refresh">
+            </div>
             <div class="btn" @click="handleDelete(feed)">
               <img src="../assets/bin.png" alt="Delete">
             </div>
@@ -124,6 +132,10 @@ export default {
     },
     // handleEdit () {
     // },
+    handleRefresh (feed) {
+      this.handleDelete(feed)
+      this.handleAdd(feed.source)
+    },
     handleDelete (feed) {
       if (feed && feed.id) {
         let index = system.rssSources.findIndex(item => item.id === feed.id)
@@ -132,12 +144,13 @@ export default {
         systemCtrl.saveRssSubscribes()
       }
     },
-    handleAdd () {
+    handleAdd (url = '') {
       this.inputUrl = this.inputUrl.replace(/\s|\n|\r/g, '')
-      if (this.loading || !this.inputUrl) {
+      url = url || this.inputUrl
+      if (this.loading || !url) {
         return
       }
-      let targetIndex = system.rssSources.findIndex(item => item.source === this.inputUrl || `${item.source}/` === this.inputUrl || item.source === `${this.inputUrl}/`)
+      let targetIndex = system.rssSources.findIndex(item => item.source === url || `${item.source}/` === url || item.source === `${url}/`)
       if (targetIndex > -1) {
         // 尝试添加一个已经添加过的feed
         if (system.rssSources[targetIndex].active) {
@@ -181,7 +194,7 @@ export default {
       } else {
         // 添加一个新feed
         system.loading = this.loading = true
-        getFeeds(this.inputUrl).then(data => {
+        getFeeds(url).then(data => {
           // console.log(data)
           system.loading = this.loading = false
           parseString(data, {
@@ -196,7 +209,7 @@ export default {
               notify.onclick = () => {}
               return
             }
-            systemCtrl.addRssSubscribes(result, this.inputUrl)
+            systemCtrl.addRssSubscribes(result, url)
             systemCtrl.saveRssSubscribes()
             systemCtrl.addChapters(result)
             this.inputUrl = ''
@@ -277,6 +290,14 @@ export default {
         background: rgba(234, 236, 101, 1);
         color: #333;
       }
+    }
+  }
+  .box-tip {
+    background: #dedeff;
+    .tip {
+      padding: 3px 24px;
+      color: #888888;
+      font-size: 12px;
     }
   }
   .box-list {
