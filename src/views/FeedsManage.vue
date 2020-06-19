@@ -14,7 +14,7 @@
     </div>
 
     <!-- 提示 -->
-    <div class="box-tip">
+    <div class="box-tip" :class="[tipActive && 'active']">
       <div class="tip">If a feed continues to fail to load, try refreshing it</div>
     </div>
 
@@ -69,11 +69,11 @@ import system from '@/models/system'
 import systemCtrl from '@/ctrls/systemCtrl'
 
 export default {
-  name: 'feedsManage',
   data () {
     return {
       loading: false,
       backLock: false,
+      tipActive: false, // 是否展示tip
       selectedActiveType: true,
       inputUrl: '',
       system
@@ -83,6 +83,15 @@ export default {
     currentList () {
       return this.system.rssSources.filter(item => item.active === this.selectedActiveType)
     }
+  },
+
+  mounted () {
+    setTimeout(() => {
+      this.tipActive = true
+      setTimeout(() => {
+        this.tipActive = false
+      }, 1000 * 10)
+    }, 1000 * 3)
   },
 
   methods: {
@@ -134,7 +143,7 @@ export default {
     // },
     handleRefresh (feed) {
       this.handleDelete(feed)
-      this.handleAdd(feed.source)
+      this.handleAdd(feed.source, feed)
     },
     handleDelete (feed) {
       if (feed && feed.id) {
@@ -144,7 +153,7 @@ export default {
         systemCtrl.saveRssSubscribes()
       }
     },
-    handleAdd (url = '') {
+    handleAdd (url = '', feedBackup = '') {
       this.inputUrl = this.inputUrl.replace(/\s|\n|\r/g, '')
       url = url || this.inputUrl
       if (this.loading || !url) {
@@ -221,6 +230,11 @@ export default {
             body: `Please check the source url`
           })
           notify.onclick = () => {}
+          if (feedBackup) {
+            // 添加失败，且存在feed备份。则恢复feed
+            system.rssSources.push(feedBackup)
+            systemCtrl.saveRssSubscribes()
+          }
         })
       }
     },
@@ -293,11 +307,19 @@ export default {
     }
   }
   .box-tip {
+    height: 0;
     background: #dedeff;
+    overflow: hidden;
+    transition: height 0.4s linear;
     .tip {
-      padding: 3px 24px;
+      height: 24px;
+      line-height: 24px;
+      padding: 0 24px;
       color: #888888;
       font-size: 12px;
+    }
+    &.active {
+      height: 24px;
     }
   }
   .box-list {
