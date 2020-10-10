@@ -1,24 +1,24 @@
-# ray
+# Ray
 
-## Project setup
-```
+`Ray` is about to letting you enjoy pure RSS reading experience
+
+## Install
+
+```shell
 npm install
+npm run e:build
 ```
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Features
 
-### Compiles and minifies for production
-```
-npm run build
-```
+* Modern UI design
+* Feeds management
+* Bookmarks
+* App configuration
+* Reading/Source code mode
 
-### Lints and fixes files
-```
-npm run lint
-```
+![preview 1](./docs/assets/1.png)
+![preview 2](./docs/assets/2.png)
 
 ## Data Storage
 
