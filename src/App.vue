@@ -9,6 +9,7 @@
       </transition>
     </div>
 
+    <link-pop></link-pop>
     <image-preview></image-preview>
     <loading></loading>
   </div>
@@ -22,6 +23,7 @@ import config from '@/models/config'
 import systemCtrl from '@/ctrls/systemCtrl'
 import dataCtrl from '@/ctrls/dataCtrl'
 import TitleBar from '@/components/TitleBar.vue'
+import LinkPop from '@/components/LinkPopover.vue'
 import ImagePreview from '@/components/ImagePreview.vue'
 import Loading from '@/components/Loading.vue'
 
@@ -42,6 +44,13 @@ export default {
         this.transitionType = 'slide-right'
       }
     }
+  },
+
+  components: {
+    TitleBar,
+    LinkPop,
+    ImagePreview,
+    Loading
   },
 
   mounted () {
@@ -75,6 +84,16 @@ export default {
 
     window.openExternalLink = (link) => {
       shell.openExternal(link)
+    }
+    window.onHoverLink = (e, link) => {
+      eventBus.$emit('hoverLink', {
+        link,
+        left: e.clientX,
+        top: e.clientY + 14
+      })
+    }
+    window.onOutLink = () => {
+      eventBus.$emit('outLink')
     }
     window.previewImage = (link) => {
       eventBus.$emit('preview', {
@@ -112,12 +131,6 @@ export default {
       })
       notify.onclick = () => {}
     }
-  },
-
-  components: {
-    TitleBar,
-    ImagePreview,
-    Loading
   }
 }
 </script>
@@ -146,6 +159,15 @@ html, body {
   height: 100%;
   font-size: 14px;
   cursor: default;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background: rgba(#ccc, .8);
+  }
   // font-family: 'Avenir', Helvetica, Arial, sans-serif;
   // -webkit-font-smoothing: antialiased;
   // -moz-osx-font-smoothing: grayscale;

@@ -137,7 +137,7 @@ export default {
   overflow: hidden;
   .box-container {
     position: relative;
-    margin-left: 426px;
+    margin-left: 420px;
     height: 100%;
     padding-top: 50px;
     white-space: nowrap;

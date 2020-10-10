@@ -116,7 +116,7 @@ export default {
           })
         })
         links.forEach((item) => {
-          originalContent = originalContent.replace(/<a [^>]*href=[^>]*>(.(?!<a))+<\/a>/, `<span class="ray-link" onclick="window.openExternalLink('${item.link}')">${item.text}</span>`)
+          originalContent = originalContent.replace(/<a [^>]*href=[^>]*>(.(?!<a))+<\/a>/, `<span class="ray-link" onmouseover="window.onHoverLink(event, '${item.link}')" onmouseout="window.onOutLink()" onclick="window.openExternalLink('${item.link}')">${item.text}</span>`)
         })
       }
       // console.log(rawImages)
