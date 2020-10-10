@@ -2,6 +2,23 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import system from './models/system'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import {
+  faAngleLeft,
+  faEye,
+  faShare,
+  faStar,
+  faCode
+} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(faEye)
+library.add(faShare)
+library.add(faStar)
+library.add(faAngleLeft)
+library.add(faCode)
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.config.productionTip = false
 

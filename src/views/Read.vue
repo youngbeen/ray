@@ -2,23 +2,26 @@
   <div class="page-view">
     <div class="window" id="chapter-window">
       <!-- <iframe v-if="url" :src="url" frameborder="0"></iframe> -->
-      <div class="chapter" v-html="content"></div>
+      <div class="chapter" v-show="mode === 'normal'" v-html="content"></div>
+      <div class="chapter" v-show="mode === 'source'" style="word-break: break-all;">{{ chapter.description }}</div>
       <div class="chapter-end">- The end -</div>
     </div>
 
     <div class="box-btns">
-      <div class="btn" @click="back()">
-        <img class="h-img" src="../assets/arrow_left.png" alt="<">
-        <span class="text">Back</span>
+      <div class="btn text-lg" @click="back()">
+        <font-awesome-icon :icon="['fas', 'angle-left']" />
       </div>
-      <div class="btn" v-if="chapter.link" @click="view()">
-        <img class="h-img" src="../assets/view.png" alt="">
+      <div class="btn" title="view on web" v-if="chapter.link" @click="view()">
+        <font-awesome-icon :icon="['fas', 'eye']" />
       </div>
-      <div class="btn" v-if="chapter.link" @click="share()">
-        <img class="n-img" src="../assets/link.png" alt="">
+      <div class="btn" :title="modeTitle" v-if="chapter.description" @click="toggleMode()">
+        <font-awesome-icon :icon="['fas', 'code']" />
       </div>
-      <div class="btn" v-show="!hasBookmarked" @click="bookmark()">
-        <img class="n-img" src="../assets/star.png" alt="">
+      <div class="btn" title="share" v-if="chapter.link" @click="share()">
+        <font-awesome-icon :icon="['fas', 'share']" />
+      </div>
+      <div class="btn" title="bookmark" v-show="!hasBookmarked" @click="bookmark()">
+        <font-awesome-icon :icon="['fas', 'star']" />
       </div>
     </div>
 
@@ -37,11 +40,11 @@ import system from '@/models/system'
 import systemCtrl from '@/ctrls/systemCtrl'
 
 export default {
-  name: 'pageView',
   data () {
     return {
       backLock: false,
       isFixedBtnShow: false,
+      mode: 'normal',
       chapter: {
         id: '', // 前端生成，生成规则 = md5(title + '=!=' + link)
         title: '',
@@ -69,6 +72,13 @@ export default {
   computed: {
     hasBookmarked () {
       return this.system.bookmarks.some(item => item.id === this.chapter.id)
+    },
+    modeTitle () {
+      if (this.mode === 'normal') {
+        return 'view source'
+      } else {
+        return 'view chapter'
+      }
     }
   },
 
@@ -147,6 +157,13 @@ export default {
     view () {
       if (this.chapter.link) {
         shell.openExternal(this.chapter.link)
+      }
+    },
+    toggleMode () {
+      if (this.mode === 'normal') {
+        this.mode = 'source'
+      } else {
+        this.mode = 'normal'
       }
     },
     back () {
@@ -234,33 +251,28 @@ export default {
     overflow: hidden;
     .btn {
       display: flex;
+      justify-content: center;
       align-items: center;
       margin-right: 1px;
+      min-width: 30px;
       height: 30px;
       line-height: 30px;
-      padding: 0 6px;
+      // padding: 0 6px;
       // border-right: 1px solid #aaa;
       background: #fff;
-      transition: all 0.4s;
+      font-size: 13px;
       cursor: pointer;
       user-select: none;
+      transition: all 0.4s;
       &:hover {
         background: rgba(255, 255, 255, .5);
       }
-      .h-img {
-        // margin-right: 6px;
-        height: 14px;
+      &.text-lg {
+        font-size: 16px;
       }
-      .w-img {
-        width: 12px;
-      }
-      .n-img {
-        max-width: 16px;
-        max-height: 16px;
-      }
-      .text {
-        margin-left: 6px;
-      }
+      // .text {
+      //   margin-left: 6px;
+      // }
     }
   }
   .fixed-btns {
