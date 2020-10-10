@@ -352,8 +352,16 @@ export default {
       }
     }
     .rows {
-      max-height: 554px;
+      max-height: 520px;
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      &::-webkit-scrollbar {
+        width: 6px;
+      }
+      &::-webkit-scrollbar-thumb {
+        border-radius: 4px;
+        background: rgba(#ccc, .8);
+      }
       .row {
         display: flex;
         justify-content: space-between;

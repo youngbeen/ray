@@ -71,20 +71,28 @@ export default {
   .box-container {
     display: inline-block;
     position: relative;
-    margin-top: 50px auto;
-    max-height: 600px;
+    margin-top: 30px;
+    max-height: 580px;
     padding: 20px;
     border-radius: 6px;
     background: #fff;
     box-shadow: 0 0 28px 1px rgba(122, 122, 122, .6);
     opacity: 0;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     transition: all 0.4s;
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+      border-radius: 4px;
+      background: rgba(#ccc, .8);
+    }
     img {
       max-width: 1000px;
     }
     &.animated {
-      margin-top: 70px;
+      margin-top: 50px;
       opacity: 1;
     }
   }

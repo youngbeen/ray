@@ -132,6 +132,14 @@ export default {
   width: 300px;
   // background: red;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background: rgba(#ccc, .8);
+  }
   .box-btn {
     display: flex;
     .btn {

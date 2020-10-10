@@ -192,6 +192,14 @@ export default {
   // background: blue;
   box-shadow: -1px 0px 18px 1px rgba(122, 122, 122, .2);
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background: rgba(#ccc, .8);
+  }
   .bed-chapter {
     padding: 16px 36px;
     .chapter-item {

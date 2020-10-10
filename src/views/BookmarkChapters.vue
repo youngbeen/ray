@@ -173,6 +173,14 @@ export default {
   // border-left: 2px solid #eee;
   // background: blue;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background: rgba(#ccc, .8);
+  }
   .bed-chapter {
     padding: 26px 36px 16px;
     .chapter-item {

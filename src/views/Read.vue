@@ -225,6 +225,14 @@ export default {
     height: 100%;
     background: #eee;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+      border-radius: 4px;
+      background: rgba(#ccc, .8);
+    }
     .chapter {
       margin: 30px auto 12px;
       width: 700px;
