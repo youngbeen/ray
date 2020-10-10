@@ -2,7 +2,7 @@
   "name": "ray",
   "description": "Enjoy pure RSS feeds reading with Ray",
   "author": "youngbeen",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -32,12 +32,12 @@
     "@vue/cli-service": "^3.0.3",
     "@vue/eslint-config-standard": "^4.0.0",
     "babel-eslint": "^10.0.1",
-    "electron": "^6.0.0",
+    "electron": "^8.5.2",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
-    "node-sass": "^4.9.0",
-    "sass-loader": "^7.1.0",
-    "vue-cli-plugin-electron-builder": "^1.4.0",
+    "node-sass": "^4.12.0",
+    "sass-loader": "^8.0.0",
+    "vue-cli-plugin-electron-builder": "^1.4.3",
     "vue-template-compiler": "^2.6.10"
   },
   "main": "background.js"

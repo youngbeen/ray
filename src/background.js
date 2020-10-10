@@ -69,10 +69,12 @@ function createWindow () {
     width: 1200,
     height: 700,
     resizable: false,
+    maximizable: false,
     titleBarStyle: 'hidden',
     webPreferences: {
       webSecurity: false,
-      nodeIntegration: true
+      nodeIntegration: true,
+      scrollBounce: true
     }
   })
 
