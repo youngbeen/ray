@@ -1,4 +1,4 @@
-import { parseString } from 'xml2js'
+import parser from 'fast-xml-parser'
 import { getFeeds } from '@/api/system'
 import system from '@/models/system'
 import systemCtrl from '@/ctrls/systemCtrl'
@@ -24,22 +24,20 @@ export default {
       if (!noLoading) {
         system.loading = false
       }
-      parseString(data, {
-        trim: true,
-        ignoreAttrs: true
-      }, (err, result) => {
-        console.log(err, result)
-        if (err) {
-          let notify = new Notification('Updating failed!', {
-            body: `Feed(${feed.title}) source has some errors`
-          })
-          notify.onclick = () => {
-          }
-          return
-        }
+      if (parser.validate(data) === true) {
+        let result = parser.parse(data, {
+          ignoreAttributes: true,
+          trimValues: true
+        })
+        console.log(111, result)
         systemCtrl.removeChapters(feed.id)
         systemCtrl.addChapters(result)
-      })
+      } else {
+        let notify = new Notification('Updating failed!', {
+          body: `Feed(${feed.title}) source has some errors`
+        })
+        notify.onclick = () => {}
+      }
     }).catch(err => {
       console.warn(err)
       if (!noLoading) {

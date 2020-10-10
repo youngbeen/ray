@@ -5,30 +5,30 @@ import config from '@/models/config'
 export default {
   addRssSubscribes (result, source) {
     let channel = {}
-    if (result.rss && result.rss.channel[0]) {
-      channel = result.rss.channel[0]
+    if (result.rss && result.rss.channel) {
+      channel = result.rss.channel
     } else if (result.feed) {
       channel = result.feed
     }
-    // console.log('md5', md5(`${result.rss.channel[0].title[0]}==${result.rss.channel[0].link[0]}`).toString())
+    // console.log('md5', md5(`${result.rss.channel.title}==${result.rss.channel.link}`).toString())
     system.rssSources.push({
-      id: md5(`${channel.title[0]}==${channel.link[0]}`).toString(),
+      id: md5(`${channel.title}==${channel.link}`).toString(),
       active: true,
-      title: channel.title[0],
+      title: channel.title,
       source,
-      link: channel.link[0],
-      description: channel.description && channel.description[0],
-      icon: channel.link[0] && `${channel.link[0]}/favicon.ico`
+      link: channel.link,
+      description: channel.description && channel.description,
+      icon: channel.link && `${channel.link}/favicon.ico`
     })
   },
   addChapters (result) {
     let channel = {}
-    if (result.rss && result.rss.channel[0]) {
-      channel = result.rss.channel[0]
+    if (result.rss && result.rss.channel) {
+      channel = result.rss.channel
     } else if (result.feed) {
       channel = result.feed
     }
-    let id = md5(`${channel.title[0]}==${channel.link[0]}`).toString()
+    let id = md5(`${channel.title}==${channel.link}`).toString()
     let feed = system.rssSources.find(item => item.id === id)
     if (!feed) {
       console.warn('添加的文章未找到对应的feed信息，无法继续操作')
@@ -43,15 +43,15 @@ export default {
     list = list.map(item => {
       let description = ''
       if (item.description) {
-        description = item.description[0]
+        description = item.description
       } else if (item.summary) {
-        description = item.summary[0]
+        description = item.summary
       }
       let pubDate = ''
       if (item.pubDate) {
-        pubDate = item.pubDate[0]
+        pubDate = item.pubDate
       } else if (item.updated) {
-        pubDate = item.updated[0]
+        pubDate = item.updated
       }
       let plainDescription = ''
       let avatar = ''
@@ -79,11 +79,11 @@ export default {
           avatar = leftStr.split(quoteType)[1]
         }
       }
-      // console.log(item.link[0])
+      // console.log(item.link)
       return {
-        id: md5(`${item.title[0]}=!=${item.link[0]}`).toString(),
-        title: item.title[0],
-        link: item.link[0],
+        id: md5(`${item.title}=!=${item.link}`).toString(),
+        title: item.title,
+        link: item.link,
         plainDescription,
         avatar,
         description,

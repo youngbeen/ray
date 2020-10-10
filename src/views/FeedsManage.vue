@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { parseString } from 'xml2js'
+import parser from 'fast-xml-parser'
 import { getFeeds } from '@/api/system'
 import system from '@/models/system'
 import systemCtrl from '@/ctrls/systemCtrl'
@@ -106,22 +106,21 @@ export default {
           getFeeds(feed.source).then(data => {
             // console.log(data)
             system.loading = this.loading = false
-            parseString(data, {
-              trim: true,
-              ignoreAttrs: true
-            }, (err, result) => {
-              console.log(err, result)
-              if (err) {
-                let notify = new Notification('Connection failed!', {
-                  body: `The feed source has some errors`
-                })
-                notify.onclick = () => {}
-                return
-              }
+            if (parser.validate(data) === true) {
+              let result = parser.parse(data, {
+                ignoreAttributes: true,
+                trimValues: true
+              })
+              console.log(111, result)
               system.rssSources[index].active = value
               systemCtrl.saveRssSubscribes()
               systemCtrl.addChapters(result)
-            })
+            } else {
+              let notify = new Notification('Connection failed!', {
+                body: `The feed source has some errors`
+              })
+              notify.onclick = () => {}
+            }
           }).catch(err => {
             console.warn(err)
             system.loading = this.loading = false
@@ -173,22 +172,21 @@ export default {
           getFeeds(system.rssSources[targetIndex].source).then(data => {
             // console.log(data)
             system.loading = this.loading = false
-            parseString(data, {
-              trim: true,
-              ignoreAttrs: true
-            }, (err, result) => {
-              console.log(err, result)
-              if (err) {
-                let notify = new Notification('Connection failed!', {
-                  body: `The feed source has some errors`
-                })
-                notify.onclick = () => {}
-                return
-              }
+            if (parser.validate(data) === true) {
+              let result = parser.parse(data, {
+                ignoreAttributes: true,
+                trimValues: true
+              })
+              console.log(111, result)
               system.rssSources[targetIndex].active = true
               systemCtrl.saveRssSubscribes()
               systemCtrl.addChapters(result)
-            })
+            } else {
+              let notify = new Notification('Connection failed!', {
+                body: `The feed source has some errors`
+              })
+              notify.onclick = () => {}
+            }
           }).catch(err => {
             console.warn(err)
             system.loading = this.loading = false
@@ -205,23 +203,22 @@ export default {
         getFeeds(url).then(data => {
           // console.log(data)
           system.loading = this.loading = false
-          parseString(data, {
-            trim: true,
-            ignoreAttrs: true
-          }, (err, result) => {
-            console.log(err, result)
-            if (err) {
-              let notify = new Notification('Connection failed!', {
-                body: `The feed source has some errors`
-              })
-              notify.onclick = () => {}
-              return
-            }
+          if (parser.validate(data) === true) {
+            let result = parser.parse(data, {
+              ignoreAttributes: true,
+              trimValues: true
+            })
+            console.log(333, result)
             systemCtrl.addRssSubscribes(result, url)
             systemCtrl.saveRssSubscribes()
             systemCtrl.addChapters(result)
             this.inputUrl = ''
-          })
+          } else {
+            let notify = new Notification('Connection failed!', {
+              body: `The feed source has some errors`
+            })
+            notify.onclick = () => {}
+          }
         }).catch(err => {
           console.warn(err)
           system.loading = this.loading = false
