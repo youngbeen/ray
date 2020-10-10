@@ -8,8 +8,8 @@
     </div>
 
     <div class="box-btns">
-      <div class="btn text-lg" @click="back()">
-        <font-awesome-icon :icon="['fas', 'angle-left']" />
+      <div class="btn" title="back" @click="back()">
+        <font-awesome-icon :icon="['fas', 'chevron-left']" />
       </div>
       <div class="btn" title="view on web" v-if="chapter.link" @click="view()">
         <font-awesome-icon :icon="['fas', 'eye']" />
@@ -274,9 +274,6 @@ export default {
       transition: all 0.4s;
       &:hover {
         background: rgba(255, 255, 255, .5);
-      }
-      &.text-lg {
-        font-size: 16px;
       }
       // .text {
       //   margin-left: 6px;

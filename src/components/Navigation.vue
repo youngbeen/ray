@@ -2,8 +2,7 @@
   <section class="bed-navigation">
     <div class="box-btn">
       <div class="btn" @click="back()">
-        <img class="arrow" src="../assets/arrow_left.png" alt="<">
-        Back
+        <font-awesome-icon :icon="['fas', 'chevron-left']" /> &nbsp;Back
       </div>
     </div>
 
@@ -18,8 +17,8 @@
     <div class="box-feed" :class="[feed.id === activeRssId ? 'active' : '']" draggable v-for="(feed) in activeFeeds" :key="feed.id" @dragstart="handleDragstart($event, feed)" @dragover.prevent="handleDragover" @drop.prevent="handleDrop($event, feed)" @click="changeFeed(feed)">
       <img class="icon" :src="feed.icon" alt="">
       {{ feed.title }}
-      <img class="fresh" src="../assets/sync.png" alt="update" @click.stop="handleSync(feed)">
-      <img class="arrow" src="../assets/arrow_right.png" alt=">" v-show="feed.id === activeRssId">
+      <font-awesome-icon :icon="['fas', 'sync-alt']" class="fresh" @click.stop="handleSync(feed)" />
+      <font-awesome-icon :icon="['fas', 'chevron-right']" class="arrow" v-show="feed.id === activeRssId" />
     </div>
 
     <div class="no-data" v-show="!activeFeeds.length">
@@ -215,7 +214,7 @@ export default {
     .fresh {
       position: absolute;
       right: 32px;
-      top: 8px;
+      top: 10px;
       width: 18px;
       opacity: 0;
       transition: all 0.1s;
@@ -223,8 +222,12 @@ export default {
     .arrow {
       position: absolute;
       right: 12px;
-      top: 12px;
-      height: 10px;
+      top: 11px;
+      width: 12px;
+      height: 12px;
+      line-height: 12px;
+      // font-size: 11px;
+      // height: 10px;
     }
     &.active {
       color: #000;

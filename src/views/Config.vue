@@ -2,8 +2,7 @@
   <section class="page-config">
     <div class="box-btn">
       <div class="btn" @click="back()">
-        <img class="arrow" src="../assets/arrow_left.png" alt="<">
-        Back
+        <font-awesome-icon :icon="['fas', 'chevron-left']" /> &nbsp;Back
       </div>
     </div>
 

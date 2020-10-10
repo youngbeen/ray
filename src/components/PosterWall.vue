@@ -19,10 +19,10 @@
     </div>
 
     <div class="box-arrow box-left-arrow" @click="toggle(-1, true)">
-      <img src="../assets/arrow_left.png" alt="<">
+      <font-awesome-icon :icon="['fas', 'chevron-left']" />
     </div>
     <div class="box-arrow box-right-arrow" @click="toggle(1, true)">
-      <img src="../assets/arrow_right.png" alt=">">
+      <font-awesome-icon :icon="['fas', 'chevron-right']" />
     </div>
   </section>
 </template>
@@ -250,10 +250,12 @@ export default {
     &.box-left-arrow {
       left: 30px;
       top: 40%;
+      font-size: 18px;
     }
     &.box-right-arrow {
       right: 30px;
       top: 40%;
+      font-size: 18px;
     }
     img {
       height: 18px;

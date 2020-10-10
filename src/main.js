@@ -5,10 +5,17 @@ import system from './models/system'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faAngleLeft,
+  faAngleRight,
+  faChevronLeft,
+  faChevronRight,
   faEye,
   faShare,
   faStar,
-  faCode
+  faCode,
+  faTrashAlt,
+  faCog,
+  faPlus,
+  faSyncAlt
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
@@ -16,7 +23,14 @@ library.add(faEye)
 library.add(faShare)
 library.add(faStar)
 library.add(faAngleLeft)
+library.add(faAngleRight)
+library.add(faChevronLeft)
+library.add(faChevronRight)
 library.add(faCode)
+library.add(faTrashAlt)
+library.add(faCog)
+library.add(faPlus)
+library.add(faSyncAlt)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

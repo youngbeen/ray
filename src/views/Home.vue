@@ -31,16 +31,19 @@
       <div class="box-seg">
         <!-- <div class="title">Feeds</div> -->
         <div class="row" v-if="activeFeeds.length" @click="addFeed()">
-          <img src="../assets/plus.png" alt="+">
-          <div class="text">Add New Rss Feed</div>
+          <div class="text">
+            <font-awesome-icon :icon="['fas', 'plus']" /> Add New Rss Feed
+          </div>
         </div>
         <div class="row" @click="goBookmarks()">
-          <img src="../assets/star.png" alt="">
-          <div class="text bold-text">Bookmarked Chapters</div>
+          <div class="text">
+            <font-awesome-icon :icon="['fas', 'star']" /> Bookmarked Chapters
+          </div>
         </div>
         <div class="row" @click="goConfig()">
-          <img src="../assets/gear.png" alt="">
-          <div class="text">System Config</div>
+          <div class="text">
+            <font-awesome-icon :icon="['fas', 'cog']" /> System Config
+          </div>
         </div>
       </div>
     </div>
@@ -221,9 +224,9 @@ export default {
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
-          &.bold-text {
-            font-weight: bold;
-          }
+          // &.bold-text {
+          //   font-weight: bold;
+          // }
         }
         &:hover {
           background: #eee;

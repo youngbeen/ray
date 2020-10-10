@@ -14,11 +14,11 @@
             </div>
 
             <div class="btns">
-              <div class="btn" v-if="chapter.link" @click.stop="viewOriginal(chapter)">
-                <img src="../assets/earth_black.png" alt="">
+              <div class="btn" title="view on web" v-if="chapter.link" @click.stop="viewOriginal(chapter)">
+                <font-awesome-icon :icon="['fas', 'eye']" />
               </div>
-              <div class="btn" @click.stop="deleteBookmark(chapter)">
-                <img src="../assets/bin.png" alt="">
+              <div class="btn" title="remove" @click.stop="deleteBookmark(chapter)">
+                <font-awesome-icon :icon="['fas', 'trash-alt']" />
               </div>
             </div>
           </div>
@@ -33,8 +33,7 @@
     <!-- 悬浮操作 -->
     <div class="box-btns">
       <div class="btn" @click="back()">
-        <img class="h-img" src="../assets/arrow_left.png" alt="<">
-        <span class="text">Back</span>
+        <font-awesome-icon :icon="['fas', 'chevron-left']" /> &nbsp;Back
       </div>
     </div>
   </section>

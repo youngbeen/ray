@@ -172,7 +172,7 @@ app.on('ready', async () => {
 
 app.setAboutPanelOptions({
   applicationName: 'Ray',
-  copyright: 'Released under ISC, all rights reversed by youngbeen 2019',
+  copyright: 'Released under ISC, all rights reversed by youngbeen 2019 - preset',
   credits: 'created by youngbeen with ❤️'
 })
 

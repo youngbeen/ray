@@ -2,8 +2,7 @@
   <section class="page-feeds-manage">
     <div class="box-btn">
       <div class="btn" @click="back()">
-        <img class="arrow" src="../assets/arrow_left.png" alt="<">
-        Back
+        <font-awesome-icon :icon="['fas', 'chevron-left']" /> &nbsp;Back
       </div>
     </div>
 
@@ -47,11 +46,11 @@
             <!-- <div class="btn" @click="handleEdit()">
               <img src="../assets/edit.png" alt="Edit">
             </div> -->
-            <div class="btn" v-show="selectedActiveType" @click="handleRefresh(feed)">
-              <img src="../assets/reload.png" alt="Refresh">
+            <div class="btn" title="reload" v-show="selectedActiveType" @click="handleRefresh(feed)">
+              <font-awesome-icon :icon="['fas', 'sync-alt']" />
             </div>
-            <div class="btn" @click="handleDelete(feed)">
-              <img src="../assets/bin.png" alt="Delete">
+            <div class="btn" title="remove" @click="handleDelete(feed)">
+              <font-awesome-icon :icon="['fas', 'trash-alt']" />
             </div>
           </div>
         </div>
