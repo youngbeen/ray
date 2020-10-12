@@ -17,7 +17,7 @@ export default {
       title: channel.title,
       source,
       link: channel.link,
-      description: channel.description && channel.description,
+      description: channel.description,
       icon: channel.link && `${channel.link}/favicon.ico`
     })
   },
@@ -56,12 +56,12 @@ export default {
       let plainDescription = ''
       let avatar = ''
       if (description) {
+        // 去除转义符
+        description = description.replace(/&nbsp;/g, ' ').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"')
         // 去除style
         plainDescription = description.replace(/<style(.)*\/style>/g, '')
         // 去除html标签
         plainDescription = plainDescription.replace(/<(\/)?[^>]*>/g, '')
-        // 去除转义符
-        plainDescription = plainDescription.replace(/&nbsp;/g, ' ')
 
         if (description.indexOf('<img') > -1) {
           // e.g.  '...<img ... src=... >'
